@@ -1,0 +1,25 @@
+[build-system]
+requires = ["maturin>=0.12,<0.13"]
+build-backend = "maturin"
+
+[project]
+name = "lightguide"
+requires-python = ">=3.8"
+authors = [
+    {name = "Marius Paul Isken"},
+    {email = "mi@gfz-potsdam.de"}
+]
+urls = {project = "https://github.com/pyrocko/lightguide"}
+keywords = ["distributed acoustic sensing", "DAS", "seismology", "earthquake modelling"]
+license = {file = "LICENSE"}
+dependencies = ["pyrocko>=2022.4.28", "numpy>=1.20.0"]
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+[project.optional-dependencies]
+formating = ["flake8", "black"]
+tests = ["pytest-benchmark", "pytest"]

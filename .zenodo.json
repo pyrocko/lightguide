@@ -1,0 +1,47 @@
+{
+    "title": "Lightguide - Seismological Tools for DAS data",
+    "description": "Lightguide is a package for handling, filtering and modelling distributed acoustic sensing (DAS) data. The package interfaces handling and processing routines of DAS data to the Pyrocko framework. The tools including restitution, frequency and fk filtering. Numerical forward modelling of various dislocation sources in layered and homogeneous half-space towards DAS strain and strain-rate is employed through Pyrocko-Green's function package.",
+    "license": "AGPL-3.0-or-later",
+    "upload_type": "software",
+    "creators": [
+        {
+            "name": "Marius Paul Isken",
+            "affiliation": "GFZ German Research Centre for Geosciences, Potsdam, Germany"
+        },
+        {
+            "name": "Sebastian Heimann",
+            "affiliation": "University of Potsdam, Germany"
+        },
+        {
+            "name": "Christopher Wollin",
+            "affiliation": "GFZ German Research Centre for Geosciences, Potsdam, Germany"
+        },
+        {
+            "name": "Hannes Bathke",
+            "affiliation": "GFZ German Research Centre for Geosciences, Potsdam, Germany"
+        },
+        {
+            "name": "Torsten Dahm",
+            "affiliation": "GFZ German Research Centre for Geosciences, Potsdam, Germany"
+        }
+    ],
+    "keywords": [
+        "Distributed acoustic sensing",
+        "DAS",
+        "Seismology",
+        "Frequency wavenumber filter"
+    ],
+    "access_right": "open",
+    "related_identifiers": [
+        {
+            "scheme": "url",
+            "identifier": "https://github.com/pyrocko/lightguide.git",
+            "relation": "isSupplementTo"
+        },
+        {
+            "scheme": "doi",
+            "identifier": "10.5281/zenodo.6580453",
+            "relation": "isVersionOf"
+        }
+    ]
+}

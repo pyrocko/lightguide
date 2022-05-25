@@ -31,17 +31,5 @@
         "Seismology",
         "Frequency wavenumber filter"
     ],
-    "access_right": "open",
-    "related_identifiers": [
-        {
-            "scheme": "url",
-            "identifier": "https://github.com/pyrocko/lightguide.git",
-            "relation": "isSupplementTo"
-        },
-        {
-            "scheme": "doi",
-            "identifier": "10.5281/zenodo.6580453",
-            "relation": "isVersionOf"
-        }
-    ]
+    "access_right": "open"
 }

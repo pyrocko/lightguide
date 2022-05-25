@@ -4,6 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "lightguide"
+description = "Tools for distributed acoustic sensing and modelling."
 requires-python = ">=3.8"
 authors = [
     {name = "Marius Paul Isken"},

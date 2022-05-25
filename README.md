@@ -2,7 +2,7 @@
 
 *Tools for distributed acoustic sensing and modelling.*
 
-[![DOI](https://zenodo.org/badge/495774991.svg)](https://zenodo.org/badge/latestdoi/495774991)
+[![PyPI version](https://badge.fury.io/py/lightguide.svg)](https://badge.fury.io/py/lightguide) [![DOI](https://zenodo.org/badge/495774991.svg)](https://zenodo.org/badge/latestdoi/495774991)
 
 Lightguide is a package for handling, filtering and modelling distributed acoustic sensing (DAS) data. The package interfaces handling and processing routines of DAS data to the [Pyrocko framework](https://pyrocko.org). Through Pyrocko's I/O engine :rocket: lightguide supports handling the following DAS data formats:
 

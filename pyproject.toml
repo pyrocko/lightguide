@@ -13,7 +13,7 @@ authors = [
 urls = {GitHub = "https://github.com/pyrocko/lightguide"}
 keywords = ["distributed acoustic sensing", "DAS", "seismology", "earthquake modelling"]
 license = {file = "LICENSE"}
-dependencies = ["pyrocko>=2022.4.28", "numpy>=1.20.0"]
+dependencies = ["pyrocko>=2022.4.28", "numpy>=1.20.0", "requests>=2.20.0"]
 readme = "README.md"
 classifiers = [
     "Programming Language :: Rust",

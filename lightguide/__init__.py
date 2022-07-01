@@ -1,1 +1,4 @@
-from . import lightguide as orafk_filter  # noqa
+import pkg_resources
+
+
+__version__ = pkg_resources.get_distribution("lightguide").version

@@ -2,7 +2,9 @@
 
 *Tools for distributed acoustic sensing and modelling.*
 
-[![PyPI version](https://badge.fury.io/py/lightguide.svg)](https://badge.fury.io/py/lightguide) [![DOI](https://zenodo.org/badge/495774991.svg)](https://zenodo.org/badge/latestdoi/495774991)
+[![PyPI version](https://badge.fury.io/py/lightguide.svg)](https://badge.fury.io/py/lightguide)
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+[![DOI](https://zenodo.org/badge/495774991.svg)](https://zenodo.org/badge/latestdoi/495774991)
 
 Lightguide is a package for handling, filtering and modelling distributed acoustic sensing (DAS) data. The package interfaces handling and processing routines of DAS data to the [Pyrocko framework](https://pyrocko.org). Through Pyrocko's I/O engine :rocket: lightguide supports handling the following DAS data formats:
 
@@ -29,11 +31,17 @@ pip install lightguide
 The adaptive frequency filter (AFK) can be used to suppress incoherent noise in DAS data sets.
 
 ```python
-from lightguide import orafk_filter
+from lightguide import filters
+from lightguide.utils import download_numpy, ExampleData
 
-filtered_data = orafk_filter.afk_filter(
-    data, window_size=32, overlap=15, exponent=0.8, normalize_power=False)
+
+das_data = download_numpy(ExampleData.VSPData)
+
+filtered_data = filters.afk_filter(
+    das_data, window_size=32, overlap=15, exponent=0.8, normalize_power=False)
 ```
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/pyrocko/lightguide/blob/master/examples/1-denoise-DAS-data.ipynb)
 
 The filtering performance of the AFK filter, applied to an earthquake recording at an [ICDP](https://www.icdp-online.org/home/) borehole observatory in Germany. The data was recorded on a [Silixa](https://silixa.com/) iDAS v2. For more details see <https://doi.org/10.5880/GFZ.2.1.2022.006>.
 
@@ -45,11 +53,11 @@ The filtering performance of the AFK filter, applied to an earthquake recording 
 
 Lightguide can be cited as:
 
-> Isken, Marius Paul; Christopher, Wollin; Heimann, Sebastian; Dahm, Torsten (2022): Lightguide - Tools for distributed acoustic sensing.
+> Marius Paul Isken, Sebastian Heimann, Christopher Wollin, Hannes Bathke, & Torsten Dahm. (2022). Lightguide - Seismological Tools for DAS data. Zenodo. https://doi.org/10.5281/zenodo.6580579
 
 Details of the adaptive frequency filter are published here:
 
-> Isken, Marius Paul; Vasyura-Bathke, Hannes; Dahm, Torsten; Heimann, Sebastian (2022): De-noising distributed acoustic sensing data using an adaptive frequency-wavenumber filter, Geophysical Journal International.
+> Marius Paul Isken, Hannes Vasyura-Bathke, Torsten Dahm, Sebastian Heimann, De-noising distributed acoustic sensing data using an adaptive frequency-wavenumber filter, Geophysical Journal International, 2022;, ggac229, https://doi.org/10.1093/gji/ggac229
 
 ## Packaging
 

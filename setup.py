@@ -24,13 +24,12 @@ setuptools.setup(
     ],
     rust_extensions=[
         RustExtension(
-            "lightguide.orafk_filter",
+            "lightguide.afk_filter",
             path="Cargo.toml",
             binding=Binding.PyO3,
             debug=False,
         )
     ],
-    package_data={"lightguide": ["data/*.npy"]},
     packages=["lightguide"],
     python_requires=">=3.8",
 )

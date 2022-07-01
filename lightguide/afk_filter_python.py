@@ -65,7 +65,7 @@ def afk_filter_python(
             if normalize_power:
                 power_spec /= power_spec.max()
 
-            weights = power_spec ** exponent
+            weights = power_spec**exponent
             window_fft *= weights
             # window_fft /= weights.sum()
             window_flt = np.fft.irfft2(window_fft)

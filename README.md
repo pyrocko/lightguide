@@ -32,10 +32,16 @@ The adaptive frequency filter (AFK) can be used to suppress incoherent noise in 
 
 ```python
 from lightguide import filters
+from lightguide.utils import download_numpy, ExampleData
+
+
+das_data = download_numpy(ExampleData.VSPData)
 
 filtered_data = filters.afk_filter(
-    data, window_size=32, overlap=15, exponent=0.8, normalize_power=False)
+    das_data, window_size=32, overlap=15, exponent=0.8, normalize_power=False)
 ```
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/pyrocko/lightguide/blob/master/examples/1-denoise-DAS-data.ipynb)
 
 The filtering performance of the AFK filter, applied to an earthquake recording at an [ICDP](https://www.icdp-online.org/home/) borehole observatory in Germany. The data was recorded on a [Silixa](https://silixa.com/) iDAS v2. For more details see <https://doi.org/10.5880/GFZ.2.1.2022.006>.
 

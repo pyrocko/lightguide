@@ -1,4 +1,4 @@
-name: CI
+name: build
 
 on:
   push:
@@ -14,6 +14,7 @@ jobs:
         manylinux: auto
         command: build
         args: --release -o dist
+
     - name: Upload wheels
       uses: actions/upload-artifact@v2
       with:
@@ -33,6 +34,19 @@ jobs:
       with:
         name: wheels
         path: dist
+
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build sdist
+        run: pipx run build --sdist
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: dist/*.tar.gz
 
   # macos:
   #   runs-on: macos-latest

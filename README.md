@@ -2,8 +2,9 @@
 
 *Tools for distributed acoustic sensing and modelling.*
 
-[![PyPI version](https://badge.fury.io/py/lightguide.svg)](https://badge.fury.io/py/lightguide)
-[![CI](https://github.com/pyrocko/lightguide/actions/workflows/CI.yml/badge.svg)](https://github.com/pyrocko/lightguide/actions/workflows/CI.yml)
+![PyPI](https://img.shields.io/pypi/v/lightguide)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/lightguide)](https://pypi.org/project/lightguide)
+[![CI](https://github.com/pyrocko/lightguide/actions/workflows/build.yml/badge.svg)](https://github.com/pyrocko/lightguide/actions/workflows/build.yml)
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 [![DOI](https://zenodo.org/badge/495774991.svg)](https://zenodo.org/badge/latestdoi/495774991)
 

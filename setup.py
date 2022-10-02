@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="lightguide",
-    version="0.2.0",
+    version="0.2.1",
     author="Marius Paul Isken",
     author_email="mi@gfz-potsdam.de",
     description="DAS Tools for Pyrocko",

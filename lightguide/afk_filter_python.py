@@ -7,7 +7,6 @@ import numpy as np
 import numpy.typing as npt
 
 
-
 @lru_cache
 def triangular_taper_python(size: int, plateau: int) -> npt.NDArray:
 

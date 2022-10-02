@@ -7,8 +7,6 @@ import numpy as np
 import numpy.typing as npt
 
 
-data = np.load(Path(__file__).parent / "data" / "data-DAS-gfz2020wswf.npy")
-
 
 @lru_cache
 def triangular_taper_python(size: int, plateau: int) -> npt.NDArray:

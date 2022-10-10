@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import numpy.typing as npt
 import numpy as np
+import numpy.typing as npt
 
 def triangular_taper(
     window_size: tuple[int, int], plateau: tuple[int, int]

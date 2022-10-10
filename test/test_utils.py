@@ -1,6 +1,8 @@
 from pathlib import Path
-from lightguide.utils import download_http, download_numpy, ExampleData
+
 import numpy as np
+
+from lightguide.utils import ExampleData, download_http, download_numpy
 
 URLS = [url for k, url in ExampleData.__dict__.items() if not k.startswith("_")]
 

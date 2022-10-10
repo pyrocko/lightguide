@@ -1,12 +1,11 @@
-import numpy as np
-
-from scipy import interpolate, ndimage, signal
 from collections.abc import Iterable
 
-from pyrocko.guts import Object, Float, List, Tuple, String, Timestamp, Bool
-from pyrocko import gf
-from pyrocko.model import Location
+import numpy as np
 import pyrocko.orthodrome as od
+from pyrocko import gf
+from pyrocko.guts import Bool, Float, List, Object, String, Timestamp, Tuple
+from pyrocko.model import Location
+from scipy import interpolate, ndimage, signal
 
 r2d = 180.0 / np.pi
 km = 1e3

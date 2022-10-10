@@ -1,19 +1,18 @@
 from __future__ import annotations
-from enum import Enum
-from tempfile import SpooledTemporaryFile
 
-import time
 import logging
+import time
+from enum import Enum
 from functools import wraps
 from pathlib import Path
+from tempfile import SpooledTemporaryFile
 from typing import Any, Callable
-import requests
 
 import numpy as np
 import numpy.typing as npt
+import requests
 from pyrocko.trace import Trace
 from scipy.signal import butter, lfilter
-
 
 # create console handler
 ch = logging.StreamHandler()

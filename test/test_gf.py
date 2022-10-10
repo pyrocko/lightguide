@@ -2,9 +2,10 @@ from pathlib import Path
 
 import numpy as np
 import pytest
-from lightguide import gf
 from pyrocko import trace
 from pyrocko.model import Location
+
+from lightguide import gf
 
 km = 1e3
 

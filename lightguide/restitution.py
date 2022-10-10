@@ -1,10 +1,11 @@
 from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 import numpy as np
 from scipy import signal
-from .utils import traces_to_numpy_and_meta
 
+from .utils import traces_to_numpy_and_meta
 
 if TYPE_CHECKING:
     from pyrocko.trace import Trace

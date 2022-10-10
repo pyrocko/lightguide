@@ -1,4 +1,5 @@
 import pytest
+
 from lightguide import gf
 
 km = 1e3

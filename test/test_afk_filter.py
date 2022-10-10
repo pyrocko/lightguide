@@ -2,6 +2,7 @@ from pathlib import Path
 
 import numpy as num
 import pytest
+
 from lightguide import filters
 
 

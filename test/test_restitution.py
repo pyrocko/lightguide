@@ -1,6 +1,6 @@
-from lightguide import restitution as res
-
 from pyrocko import trace
+
+from lightguide import restitution as res
 
 
 def test_strainrate_to_strain(syn_das_data, show_plot):

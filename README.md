@@ -4,8 +4,9 @@
 
 ![PyPI](https://img.shields.io/pypi/v/lightguide)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/lightguide)](https://pypi.org/project/lightguide)
-[![CI](https://github.com/pyrocko/lightguide/actions/workflows/build.yml/badge.svg)](https://github.com/pyrocko/lightguide/actions/workflows/build.yml)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://pre-commit.com/)
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+[![CI](https://github.com/pyrocko/lightguide/actions/workflows/build.yml/badge.svg)](https://github.com/pyrocko/lightguide/actions/workflows/build.yml)
 
 Lightguide is a package for handling, filtering and modelling distributed acoustic sensing (DAS) data. The package interfaces handling and processing routines of DAS data to the [Pyrocko framework](https://pyrocko.org). Through Pyrocko's I/O engine :rocket: lightguide supports handling the following DAS data formats:
 
@@ -54,13 +55,13 @@ The filtering performance of the AFK filter, applied to an earthquake recording 
 
 Lightguide can be cited as:
 
-> Marius Paul Isken, Sebastian Heimann, Christopher Wollin, Hannes Bathke, & Torsten Dahm. (2022). Lightguide - Seismological Tools for DAS data. Zenodo. https://doi.org/10.5281/zenodo.6580579
+> Marius Paul Isken, Sebastian Heimann, Christopher Wollin, Hannes Bathke, & Torsten Dahm. (2022). Lightguide - Seismological Tools for DAS data. Zenodo. <https://doi.org/10.5281/zenodo.6580579>
 
 [![DOI](https://zenodo.org/badge/495774991.svg)](https://zenodo.org/badge/latestdoi/495774991)
 
 Details of the adaptive frequency filter are published here:
 
-> Marius Paul Isken, Hannes Vasyura-Bathke, Torsten Dahm, Sebastian Heimann, De-noising distributed acoustic sensing data using an adaptive frequency-wavenumber filter, Geophysical Journal International, 2022;, ggac229, https://doi.org/10.1093/gji/ggac229
+> Marius Paul Isken, Hannes Vasyura-Bathke, Torsten Dahm, Sebastian Heimann, De-noising distributed acoustic sensing data using an adaptive frequency-wavenumber filter, Geophysical Journal International, 2022;, ggac229, <https://doi.org/10.1093/gji/ggac229>
 
 [![DOI](https://img.shields.io/badge/DOI-10.1093%2Fgji%2Fggac229-blue)](https://doi.org/10.1093/gji/ggac229)
 

@@ -6,8 +6,6 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     zip_safe=False,
-    long_description=long_description,
-    long_description_content_type="text/markdown",
     rust_extensions=[
         RustExtension(
             "lightguide.afk_filter",
@@ -17,5 +15,4 @@ setuptools.setup(
         )
     ],
     packages=["lightguide"],
-    python_requires=">=3.8",
 )

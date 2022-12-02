@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 from functools import lru_cache
-from pathlib import Path
 
 import numpy as np
-import numpy.typing as npt
 
 
 @lru_cache
-def triangular_taper_python(size: int, plateau: int) -> npt.NDArray:
-
+def triangular_taper_python(size: int, plateau: int) -> np.ndarray:
     if plateau > size:
         raise ValueError("Plateau cannot be larger than size.")
     if size % 2 or plateau % 2:
@@ -24,16 +21,18 @@ def triangular_taper_python(size: int, plateau: int) -> npt.NDArray:
 
 
 def afk_filter_python(
-    data: npt.NDArray,
+    data: np.ndarray,
     window_size: int = 32,
     overlap: int = 14,
     exponent: float = 0.3,
     normalize_power: bool = False,
-) -> npt.NDArray:
-    if np.log2(window_size) % 1.0 or window_size < 4:
-        raise ValueError("window_size has to be pow(2) and > 4.")
+) -> np.ndarray:
+    if np.log2(window_size) % 1 or window_size < 4:
+        raise ValueError(f"Window size {window_size} be pow(2) and > 4.")
     if overlap > window_size / 2 - 1:
-        raise ValueError("Overlap is too large. Maximum overlap: window_size / 2 - 1.")
+        raise ValueError(
+            f"Overlap {overlap} is too large. Maximum overlap: window_size / 2 - 1."
+        )
 
     window_stride = window_size - overlap
     window_non_overlap = window_size - 2 * overlap

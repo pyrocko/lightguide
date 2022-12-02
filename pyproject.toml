@@ -1,5 +1,9 @@
 [build-system]
-requires = ["maturin>=0.14,<0.15", "setuptools_scm[toml]>=6.2"]
+requires = [
+  "maturin>=0.14,<0.15",
+  "setuptools_scm[toml]>=6.2",
+  "setuptools-rust",
+]
 build-backend = "maturin"
 
 [project]
@@ -7,18 +11,20 @@ name = "lightguide"
 description = "Tools for distributed acoustic sensing and modelling."
 dynamic = ["version"]
 requires-python = ">=3.8"
-authors = [
-    {name = "Marius Paul Isken"},
-    {email = "mi@gfz-potsdam.de"}
+authors = [{ name = "Marius Paul Isken" }, { email = "mi@gfz-potsdam.de" }]
+keywords = [
+  "distributed acoustic sensing",
+  "DAS",
+  "seismology",
+  "earthquake modelling",
 ]
-keywords = ["distributed acoustic sensing", "DAS", "seismology", "earthquake modelling"]
-license = {file = "LICENSE"}
+license = { file = "LICENSE" }
 dependencies = ["pyrocko>=2022.4.28", "numpy>=1.20.0", "requests>=2.20.0"]
 readme = "README.md"
 classifiers = [
-    "Programming Language :: Rust",
-    "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: Implementation :: PyPy",
+  "Programming Language :: Rust",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
 ]
 
 [project.urls]
@@ -27,9 +33,4 @@ GitHub = "https://github.com/pyrocko/lightguide"
 Issues = "https://github.com/pyrocko/lightguide/issues"
 
 [project.optional-dependencies]
-dev = [
-  "flake8",
-  "black",
-  "pytest-benchmark",
-  "pytest"
-]
+dev = ["ruff", "black>=23.0.0", "isort", "pytest-benchmark", "pytest"]

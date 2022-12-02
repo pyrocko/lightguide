@@ -78,10 +78,30 @@ pip install maturin
 maturin build
 ```
 
-## Contribution
+### Development
 
-Contribution and merge requests by the community are welcome!
+Local development through pip or maturin.
+
+```sh
+cd lightguide
+pip3 install .[dev]
+```
+
+or
+
+```sh
+cd lightguide
+maturin develop
+```
+
+The project utilizes pre-commit for clean commits, install the hooks via:
+
+```sh
+pre-commit install
+```
 
 ## License
+
+Contribution and merge requests by the community are welcome!
 
 Lightguide was written by Marius Paul Isken and is licensed under the GNU GENERAL PUBLIC LICENSE v3.

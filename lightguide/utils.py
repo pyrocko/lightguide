@@ -9,6 +9,8 @@ from typing import Any, Callable
 import numpy as np
 import requests
 
+PathStr = Path | str
+
 
 class ExampleData:
     VSPData = "https://data.pyrocko.org/testing/lightguide/das-data.npy"

@@ -24,6 +24,8 @@ from pyrocko import io
 from pyrocko.trace import Trace
 from scipy import signal
 
+from lightguide.utils import PathStr
+
 from .filters import afk_filter
 from .signal import decimation_coefficients
 
@@ -417,12 +419,17 @@ class Blast:
         """
         return deepcopy(self)
 
-    def save_mseed(self, filename: Path | str) -> None:
+    def save_mseed(self, filename: PathStr) -> None:
+        """Save as miniSeed.
+
+        Args:
+            filename (PathStr):
+        """
         filename = Path(filename)
         traces = self.as_traces()
         io.save(traces, filename_template=str(filename), format="mseed")
 
-    def as_traces(self):
+    def as_traces(self) -> list[Trace]:
         traces = []
         for icha in range(self.n_channels):
             channel = icha + self.start_channel
@@ -438,6 +445,19 @@ class Blast:
 
     @classmethod
     def from_pyrocko(cls, traces: list[Trace], channel_spacing: float = 0.0) -> Blast:
+        """Create Blast from a list of Pyrocko traces.
+
+        Args:
+            traces (list[Trace]): List of input traces
+            channel_spacing (float, optional): Spatial channel spacing in meter.
+                Defaults to 0.0.
+
+        Raises:
+            ValueError: If input is odd.
+
+        Returns:
+            Blast: Assembled Blast.
+        """
         if not traces:
             raise ValueError("Empty list of traces")
 
@@ -547,62 +567,3 @@ class Pack:
 
     trim_time = shared_function(Blast.trim_time)
     trim_channels = shared_function(Blast.trim_channels)
-
-    mute_median = shared_function(Blast.mute_median)
-    one_bit_normalization = shared_function(Blast.one_bit_normalization)
-    afk_filter = shared_function(Blast.afk_filter)
-    decimate = shared_function(Blast.decimate)
-
-    trim_time = shared_function(Blast.trim_time)
-    trim_channels = shared_function(Blast.trim_channels)
-
-    mute_median = shared_function(Blast.mute_median)
-    one_bit_normalization = shared_function(Blast.one_bit_normalization)
-    afk_filter = shared_function(Blast.afk_filter)
-    decimate = shared_function(Blast.decimate)
-
-    trim_time = shared_function(Blast.trim_time)
-    trim_channels = shared_function(Blast.trim_channels)
-
-    mute_median = shared_function(Blast.mute_median)
-    one_bit_normalization = shared_function(Blast.one_bit_normalization)
-    afk_filter = shared_function(Blast.afk_filter)
-    decimate = shared_function(Blast.decimate)
-
-    trim_time = shared_function(Blast.trim_time)
-    trim_channels = shared_function(Blast.trim_channels)
-
-    mute_median = shared_function(Blast.mute_median)
-    one_bit_normalization = shared_function(Blast.one_bit_normalization)
-    afk_filter = shared_function(Blast.afk_filter)
-    decimate = shared_function(Blast.decimate)
-
-    trim_time = shared_function(Blast.trim_time)
-    trim_channels = shared_function(Blast.trim_channels)
-
-    mute_median = shared_function(Blast.mute_median)
-    one_bit_normalization = shared_function(Blast.one_bit_normalization)
-    afk_filter = shared_function(Blast.afk_filter)
-    decimate = shared_function(Blast.decimate)
-
-    trim_time = shared_function(Blast.trim_time)
-    trim_channels = shared_function(Blast.trim_channels)
-
-    mute_median = shared_function(Blast.mute_median)
-    one_bit_normalization = shared_function(Blast.one_bit_normalization)
-    afk_filter = shared_function(Blast.afk_filter)
-    decimate = shared_function(Blast.decimate)
-
-    trim_time = shared_function(Blast.trim_time)
-    trim_channels = shared_function(Blast.trim_channels)
-
-    mute_median = shared_function(Blast.mute_median)
-    one_bit_normalization = shared_function(Blast.one_bit_normalization)
-    afk_filter = shared_function(Blast.afk_filter)
-    decimate = shared_function(Blast.decimate)
-
-    trim_time = shared_function(Blast.trim_time)
-    trim_channels = shared_function(Blast.trim_channels)
-
-    mute_median = shared_function(Blast.mute_median)
-    one_bit_normalization = shared_function(Blast.one_bit_normalization)

@@ -283,7 +283,7 @@ class Blast:
         self.data[envelope > cutoff_level] = 0.0
 
     def trim_channels(self, begin: int = 0, end: int = -1) -> None:
-        """Trim blast to channels
+        """Trim the `Blast` to channels.
 
         Args:
             begin (int, optional): Begin channel. Defaults to 0.
@@ -412,7 +412,7 @@ class Blast:
         return img
 
     def copy(self) -> Blast:
-        """Copy and return the blast.
+        """Return a copy of the blast.
 
         Returns:
             Blast: Copied blast.
@@ -430,6 +430,13 @@ class Blast:
         io.save(traces, filename_template=str(filename), format="mseed")
 
     def as_traces(self) -> list[Trace]:
+        """Converts the data in the Blast object into Pyrocko's Trace format.
+
+        Returns:
+            list[Trace]: A list of Pyrocko Trace instances,
+                one for each channel in the data.
+        """
+
         traces = []
         for icha in range(self.n_channels):
             channel = icha + self.start_channel
@@ -506,6 +513,7 @@ def shared_function(func: TFun) -> TFun:
         for blast in self.blasts:
             func(blast, *args, **kwargs)
 
+    wrapper.__doc__ = wrapper.__doc__.replace("Blast", "Pack")
     return cast(TFun, wrapper)
 
 
@@ -567,3 +575,7 @@ class Pack:
 
     trim_time = shared_function(Blast.trim_time)
     trim_channels = shared_function(Blast.trim_channels)
+
+    to_strain = shared_function(Blast.to_strain)
+    to_relative_velocity = shared_function(Blast.to_relative_velocity)
+    to_relative_displacement = shared_function(Blast.to_relative_displacement)

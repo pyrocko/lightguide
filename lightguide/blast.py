@@ -78,10 +78,16 @@ class Blast:
                 Defaults to 0.0.
             unit (MeasurementUnit, optional): Measurement unit.
                 Defaults to "strain rate".
+        Raises:
+            ValueError: When start_time has no time zone information.
         """
+        if not start_time.tzinfo:
+            raise ValueError("start_time has no time zone information.")
+
         self.data = data
         self.start_time = start_time
         self.sampling_rate = sampling_rate
+        self.unit = unit
 
         self.start_channel = start_channel
         self.channel_spacing = channel_spacing
@@ -117,6 +123,49 @@ class Blast:
     def duration(self) -> float:
         """Duration in seconds."""
         return self.n_samples * self.delta_t
+
+    def get_trace(self, channel: int) -> np.ndarray:
+        """Get data from a singular channel.
+
+        Args:
+            channel (int): Channel number.
+
+        Returns:
+            np.ndarray: 1D Trace.
+        """
+        return self.data[self.start_channel + channel]
+
+    def _time_to_sample(self, time: datetime) -> int:
+        """Get sample index for a time.
+
+        Args:
+            time (datetime): Time of desired sample
+
+        Raises:
+            ValueError: Raised when time is out of range.
+
+        Returns:
+            int: Sample index
+        """
+        if not self.start_time < time < self.end_time:
+            raise ValueError("Time is out of range.")
+        dt = time - self.start_time
+        return int(dt.total_seconds() // self.delta_t)
+
+    def _sample_to_time(self, index: int) -> datetime:
+        """Get sample index for a time.
+
+        Args:
+            time (datetime): Time of desired sample
+
+        Raises:
+            ValueError: Raised when time is out of range.
+
+        Returns:
+            int: Sample index
+        """
+        dt = timedelta(seconds=index * self.delta_t)
+        return self.start_time + dt
 
     def detrend(self, type: Literal["linear", "constant"] = "linear") -> None:
         """Demean and detrend in time-domain in-place.
@@ -248,9 +297,9 @@ class Blast:
 
     def afk_filter(
         self,
+        exponent: float = 0.8,
         window_size: int = 16,
         overlap: int = 7,
-        exponent: float = 0.8,
         normalize_power: bool = False,
     ) -> None:
         """Apply adaptive frequency filter (AFK) in-place.
@@ -271,6 +320,98 @@ class Blast:
             exponent=exponent,
             normalize_power=normalize_power,
         )
+
+    def follow_phase(
+        self,
+        pick_time: datetime,
+        pick_channel: int,
+        window_size: int | tuple[int, int] = 50,
+        threshold: float = 5e-1,
+        max_shift: int = 50,
+    ) -> tuple[np.ndarray, list[datetime], np.ndarray]:
+        """Follow a phase pick through a Blast.
+
+        This function leverages the spatial coherency of a DAS data set. Following a
+        phase through iterative cross-correlation of neighboring traces:
+
+            1. Get windowed root pick template.
+            2. Calculate normalized cross correlate with downwards neighbor.
+            3. Evaluate maximum x-correlation in allowed window (max_shift).
+            4. Update template trace and go to 2.
+
+            5. Repeat for upward neighbors.
+            6. Profit.
+
+        Args:
+            pick_time (datetime): Initial pick in the data set.
+            pick_channel (int): Corresponding channel for the initial pick.
+            window_size (int | tuple[int, int], optional): Window size around the pick
+                for the correlation. If an integer is given it is the half-width.
+                A Tuple gives pre- and post-windows. Defaults to 50.
+            threshold (float, optional): Picking threshold for the cross correlation.
+                Defaults to 5e-1.
+            max_shift (int, optional): Maximum allowed shift for neighboring picks.
+                Defaults to 50.
+
+        Returns:
+            tuple[np.ndarray, list[datetime], np.ndarray]: Tuple of channel number,
+                pick time and maximum correlation coefficient.
+        """
+        if isinstance(window_size, int):
+            window_size = (window_size, window_size)
+
+        root_idx = self._time_to_sample(pick_time)
+        root_template = self.get_trace(pick_channel)[
+            root_idx - window_size[0] : root_idx + window_size[1]
+        ]
+        template_taper = signal.windows.tukey(root_template.size, alpha=0.1)
+
+        pick_channels, pick_times, pick_correlations = [], [], []
+
+        def prepare_template(data: np.ndarray) -> np.ndarray:
+            return data * template_taper
+
+        def correlate(data: np.ndarray, direction: Literal[1, -1] = 1) -> None:
+            template = root_template.copy()
+            index = root_idx
+
+            for ichannel, trace in enumerate(data):
+                template = prepare_template(template)
+                norm = np.sqrt(np.sum(template**2)) * np.sqrt(np.sum(trace**2))
+                correlation = np.correlate(trace, template, mode="same")
+                correlation = np.abs(correlation / norm)
+
+                # Take maximum only in allowed window
+                phase_idx = (
+                    np.argmax(correlation[index - max_shift : index + max_shift])
+                    + index
+                    - max_shift
+                )
+                phase_correlation = correlation[phase_idx]
+                phase_time = self._sample_to_time(int(phase_idx))
+
+                if phase_correlation < threshold:
+                    continue
+
+                if not max_shift < phase_idx < self.n_samples - max_shift:
+                    continue
+
+                pick_times.append(phase_time)
+                pick_channels.append(pick_channel + ichannel * direction)
+                pick_correlations.append(phase_correlation)
+
+                template = trace[
+                    phase_idx - window_size[0] : phase_idx + window_size[1]
+                ]
+                index = phase_idx
+
+        correlate(self.data[pick_channel:])
+        correlate(self.data[: pick_channel - 1][::-1], direction=-1)
+
+        pick_channels = np.array(pick_channels) + self.start_channel
+        pick_correlations = np.array(pick_correlations)
+
+        return pick_channels, pick_times, pick_correlations
 
     def taper(self, alpha: float = 0.05) -> None:
         """Taper in time-domain and in-place with a Tukey window.

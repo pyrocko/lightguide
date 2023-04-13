@@ -4,12 +4,12 @@ import time
 from functools import wraps
 from pathlib import Path
 from tempfile import SpooledTemporaryFile
-from typing import Any, Callable
+from typing import Any, Callable, Union
 
 import numpy as np
 import requests
 
-PathStr = Path | str
+PathStr = Union[Path, str]
 
 
 class ExampleData:

@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from lightguide import gf
+from lightguide import gf, utils
 from lightguide.blast import Blast
 
 km = 1e3
@@ -53,8 +53,30 @@ def syn_das_data():
     return get_data
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def random_blast() -> Blast:
     rng = np.random.default_rng()
     data = rng.integers(-1000, 1000, size=(100, 5000)).astype(np.int32)
-    return Blast(data=data, start_time=datetime.now(tz=timezone.utc), sampling_rate=100)
+    return Blast(
+        data=data,
+        start_time=datetime.now(tz=timezone.utc),
+        sampling_rate=100,
+    )
+
+
+@pytest.fixture
+def data_eq(data_dir: Path) -> np.ndarray:
+    file = data_dir / "data-DAS-gfz2020wswf.npy"
+    if not file.exists():
+        utils.download_http(utils.ExampleData.EQData, file)
+    return np.load(file)
+
+
+@pytest.fixture
+def blast_eq(data_eq) -> Blast:
+    return Blast(
+        data_eq,
+        start_time=datetime.fromisoformat("2020-11-19T09:27:08.190+00:00"),
+        sampling_rate=200.0,
+        channel_spacing=1.0,
+    )

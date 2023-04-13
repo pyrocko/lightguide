@@ -41,6 +41,7 @@ docs = [
   "furo",
   "sphinx-copybutton",
   "sphinx-design",
+  "myst-nb",
 ]
 
 [tool.ruff]

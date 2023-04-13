@@ -133,7 +133,9 @@ class Blast:
         Returns:
             np.ndarray: 1D Trace.
         """
-        return self.data[self.start_channel + channel]
+        if not self.start_channel <= channel < self.end_channel:
+            raise ValueError(f"Channel {channel} is out of bounds")
+        return self.data[channel - self.start_channel]
 
     def _time_to_sample(self, time: datetime) -> int:
         """Get sample index for a time.
@@ -147,7 +149,7 @@ class Blast:
         Returns:
             int: Sample index
         """
-        if not self.start_time < time < self.end_time:
+        if not self.start_time <= time <= self.end_time:
             raise ValueError("Time is out of range.")
         dt = time - self.start_time
         return int(dt.total_seconds() // self.delta_t)

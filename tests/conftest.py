@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -48,13 +48,13 @@ def syn_das_data():
 
         source = pgf.DCSource(lat=0.0, lon=0.0, depth=2 * km, strike=45.0, dip=30.0)
 
-        traces = engine.process_fiber(source, fiber)
-        return traces
+        return engine.process_fiber(source, fiber)
 
     return get_data
 
 
 @pytest.fixture(scope="module")
 def random_blast() -> Blast:
-    data = np.random.randint(-1000, 1000, size=(100, 5000)).astype(np.int32)
-    return Blast(data=data, start_time=datetime.utcnow(), sampling_rate=100)
+    rng = np.random.default_rng()
+    data = rng.integers(-1000, 1000, size=(100, 5000)).astype(np.int32)
+    return Blast(data=data, start_time=datetime.now(tz=timezone.utc), sampling_rate=100)

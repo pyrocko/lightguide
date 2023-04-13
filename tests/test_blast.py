@@ -54,7 +54,8 @@ def test_signaling(random_blast: Blast, show_plot: bool):
 
 
 def test_from_pyrocko():
-    trace = Trace(ydata=np.random.randint(-1000, 1000, size=1000), station="123")
+    rng = np.random.default_rng()
+    trace = Trace(ydata=rng.integers(-1000, 1000, size=1000), station="123")
     Blast.from_pyrocko([trace] * 20)
 
 

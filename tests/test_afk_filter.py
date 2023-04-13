@@ -17,7 +17,8 @@ def data(data_dir: Path):
 @pytest.fixture
 def data_big():
     n = 2048
-    return np.random.uniform(size=(n, n)).astype(np.float32)
+    rng = np.random.default_rng()
+    return rng.uniform(size=(n, n)).astype(np.float32)
 
 
 def test_taper():

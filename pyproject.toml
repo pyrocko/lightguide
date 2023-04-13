@@ -44,5 +44,5 @@ docs = [
 ]
 
 [tool.ruff]
-select = ['E', 'F', 'W', 'N', 'B', 'DTZ', 'G', 'RET', 'SIM']
+select = ['E', 'F', 'W', 'N', 'B', 'DTZ', 'G', 'RET', 'SIM', 'NPY']
 exclude = ["doc/source/conf.py"]

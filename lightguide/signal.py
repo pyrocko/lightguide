@@ -32,7 +32,8 @@ def decimation_coefficients(
         order = order or 30
         coeffs = signal.firwin(order + 1, 0.75 / decimation_factor, window="hamming")
         return coeffs, [1.0], order
-    elif filter_type == "fir-remez":
+
+    if filter_type == "fir-remez":
         order = order or 40 * decimation_factor + 1
         coeffs = signal.remez(
             order + 1,
@@ -42,7 +43,8 @@ def decimation_coefficients(
             weight=(1, 50),
         )
         return coeffs, [1.0], order
-    elif filter_type == "cheby":
+
+    if filter_type == "cheby":
         order = order or 8
         coeffs, a = signal.cheby1(order, 0.05, 0.8 / decimation_factor)
         return coeffs, a, order

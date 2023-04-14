@@ -1,0 +1,1058 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
+        <title>lightguide.blast - Lightguide 0.4.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Lightguide 0.4.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Lightguide 0.4.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/1-import-data.html">DAS Data Import</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/2-data-processing.html">Data Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/3-event-analysis.html">Signal and Event Analysis</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Methods</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../afk_filter.html">Adaptive Frequency Filter</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for lightguide.blast</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span><span class="p">,</span> <span class="n">timezone</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TYPE_CHECKING</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Iterable</span><span class="p">,</span>
+    <span class="n">Iterator</span><span class="p">,</span>
+    <span class="n">Literal</span><span class="p">,</span>
+    <span class="n">TypeVar</span><span class="p">,</span>
+    <span class="n">cast</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">colors</span><span class="p">,</span> <span class="n">dates</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">Colormap</span>
+<span class="kn">from</span> <span class="nn">pyrocko</span> <span class="kn">import</span> <span class="n">io</span>
+<span class="kn">from</span> <span class="nn">pyrocko.trace</span> <span class="kn">import</span> <span class="n">Trace</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span>
+
+<span class="kn">from</span> <span class="nn">lightguide.utils</span> <span class="kn">import</span> <span class="n">PathStr</span>
+
+<span class="kn">from</span> <span class="nn">.filters</span> <span class="kn">import</span> <span class="n">afk_filter</span>
+<span class="kn">from</span> <span class="nn">.signal</span> <span class="kn">import</span> <span class="n">decimation_coefficients</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">image</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="n">MeasurementUnit</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span>
+    <span class="s2">&quot;strain rate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;strain&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;acceleration&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;velocity&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;displacement&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;velocity&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="Blast"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast">[docs]</a><span class="k">class</span> <span class="nc">Blast</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Blast represents a time-space patch from a DAS recording.&quot;&quot;&quot;</span>
+
+    <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">start_time</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">sampling_rate</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">processing_flow</span><span class="p">:</span> <span class="nb">list</span>
+
+    <span class="n">unit</span><span class="p">:</span> <span class="n">MeasurementUnit</span>
+
+    <span class="n">start_channel</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">channel_spacing</span><span class="p">:</span> <span class="nb">float</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">start_time</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">start_channel</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">channel_spacing</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">unit</span><span class="p">:</span> <span class="n">MeasurementUnit</span> <span class="o">=</span> <span class="s2">&quot;strain rate&quot;</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new blast from NumPy array.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (np.ndarray): Data as a 2D array.</span>
+<span class="sd">            start_time (datetime): Start time of the blast.</span>
+<span class="sd">            sampling_rate (float): Sampling rate in Hz.</span>
+<span class="sd">            start_channel (int, optional): Start channel. Defaults to 0.</span>
+<span class="sd">            channel_spacing (float, optional): Channel spacing in meters.</span>
+<span class="sd">                Defaults to 0.0.</span>
+<span class="sd">            unit (MeasurementUnit, optional): Measurement unit.</span>
+<span class="sd">                Defaults to &quot;strain rate&quot;.</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: When start_time has no time zone information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">start_time</span><span class="o">.</span><span class="n">tzinfo</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;start_time has no time zone information.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">start_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">sampling_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="n">unit</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_channel</span> <span class="o">=</span> <span class="n">start_channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel_spacing</span> <span class="o">=</span> <span class="n">channel_spacing</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">processing_flow</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">delta_t</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sampling interval in seconds.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">end_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;End time of the Blast.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_t</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of channels.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">end_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;End Channel.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_channel</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_channels</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of Samples.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">duration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Duration in seconds.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_t</span>
+
+<div class="viewcode-block" id="Blast.get_trace"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.get_trace">[docs]</a>    <span class="k">def</span> <span class="nf">get_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get data from a singular channel.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            channel (int): Channel number.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.ndarray: 1D Trace.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_channel</span> <span class="o">&lt;=</span> <span class="n">channel</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_channel</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Channel </span><span class="si">{</span><span class="n">channel</span><span class="si">}</span><span class="s2"> is out of bounds&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">channel</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_channel</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="nf">_time_to_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get sample index for a time.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            time (datetime): Time of desired sample</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: Raised when time is out of range.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Sample index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">&lt;=</span> <span class="n">time</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Time is out of range.&quot;</span><span class="p">)</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_t</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_sample_to_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get sample index for a time.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            time (datetime): Time of desired sample</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: Raised when time is out of range.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Sample index</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">index</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_t</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">+</span> <span class="n">dt</span>
+
+<div class="viewcode-block" id="Blast.detrend"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.detrend">[docs]</a>    <span class="k">def</span> <span class="nf">detrend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="s2">&quot;constant&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Demean and detrend in time-domain in-place.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            type (Literal[&quot;linear&quot;, &quot;constant&quot;], optional): he type of detrending.</span>
+<span class="sd">            If type == &#39;linear&#39; (default), the result of a linear least-squares fit</span>
+<span class="sd">            to data is subtracted from data. If type == &#39;constant&#39;,</span>
+<span class="sd">            only the mean of data is subtracted.. Defaults to &quot;linear&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">detrend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blast.decimate"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.decimate">[docs]</a>    <span class="k">def</span> <span class="nf">decimate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">demean</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Decimate in time-domain by a factor, in-place.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            factor (int): Decimation factor, must be &gt; 1.</span>
+<span class="sd">            demean (bool): Demean signal before decimation. Defaults to True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">factor</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">demean</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">factor</span><span class="p">)</span> <span class="o">%</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Decimating to odd sampling rate </span><span class="si">%.2f</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">/</span> <span class="n">factor</span>
+            <span class="p">)</span>
+
+        <span class="n">coeff_b</span><span class="p">,</span> <span class="n">coeff_a</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">decimation_coefficients</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">filter_type</span><span class="o">=</span><span class="s2">&quot;fir-remez&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">coeff_b</span><span class="p">,</span> <span class="n">coeff_a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">::</span><span class="n">factor</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span> <span class="o">/=</span> <span class="n">factor</span></div>
+
+<div class="viewcode-block" id="Blast.lowpass"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.lowpass">[docs]</a>    <span class="k">def</span> <span class="nf">lowpass</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">cutoff_freq</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">demean</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">zero_phase</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply low-pass filter in-place using a Butterworth filter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cutoff_freq (float): cutoff frequency of the lowpass filter.</span>
+<span class="sd">            order (int): order of the filter</span>
+<span class="sd">            demean: (Optional) Mean is removed before filtering. Default is True.</span>
+<span class="sd">            zero_phase (bool, optional): Use zero phase filter. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sos</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span>
+            <span class="n">N</span><span class="o">=</span><span class="n">order</span><span class="p">,</span>
+            <span class="n">Wn</span><span class="o">=</span><span class="n">cutoff_freq</span><span class="p">,</span>
+            <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;lowpass&quot;</span><span class="p">,</span>
+            <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">demean</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">zero_phase</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blast.highpass"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.highpass">[docs]</a>    <span class="k">def</span> <span class="nf">highpass</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">cutoff_freq</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">demean</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">zero_phase</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply high-pass filter in-place using a Butterworth filter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cutoff_freq (float): cutoff frequency of the highpass filter.</span>
+<span class="sd">            order (int): order of the filter. Default is 4.</span>
+<span class="sd">            demean: (bool, optional) Remove mean before filtering. Default is True.</span>
+<span class="sd">            zero_phase (bool, optional): Use zero phase filter. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sos</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span>
+            <span class="n">N</span><span class="o">=</span><span class="n">order</span><span class="p">,</span>
+            <span class="n">Wn</span><span class="o">=</span><span class="n">cutoff_freq</span><span class="p">,</span>
+            <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;highpass&quot;</span><span class="p">,</span>
+            <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">demean</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">zero_phase</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blast.bandpass"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.bandpass">[docs]</a>    <span class="k">def</span> <span class="nf">bandpass</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">min_freq</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">max_freq</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="n">demean</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">zero_phase</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply band-pass filter in-place using a Butterworth filter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            min_freq (float): Lower corner of the band pass filter in Hz.</span>
+<span class="sd">            max_freq (float): Upper corner of the band pass filter in Hz.</span>
+<span class="sd">            order (int, optional): Order of the filter. Defaults to 4.</span>
+<span class="sd">            demean (bool, optional): Remove mean before filtering. Defaults to True.</span>
+<span class="sd">            zero_phase (bool, optional): Use zero phase filter. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sos</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">butter</span><span class="p">(</span>
+            <span class="n">N</span><span class="o">=</span><span class="n">order</span><span class="p">,</span>
+            <span class="n">Wn</span><span class="o">=</span><span class="p">(</span><span class="n">min_freq</span><span class="p">,</span> <span class="n">max_freq</span><span class="p">),</span>
+            <span class="n">btype</span><span class="o">=</span><span class="s2">&quot;bandpass&quot;</span><span class="p">,</span>
+            <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling_rate</span><span class="p">,</span>
+            <span class="n">output</span><span class="o">=</span><span class="s2">&quot;sos&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">demean</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">zero_phase</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">sosfiltfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">sosfilt</span><span class="p">(</span><span class="n">sos</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blast.afk_filter"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.afk_filter">[docs]</a>    <span class="k">def</span> <span class="nf">afk_filter</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">exponent</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+        <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
+        <span class="n">overlap</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span>
+        <span class="n">normalize_power</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply adaptive frequency filter (AFK) in-place.</span>
+
+<span class="sd">        The adaptive frequency filter (AFK) can be used to suppress incoherent noise</span>
+<span class="sd">        in DAS data and other spatially coherent data sets.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            window_size (int): Square window size. Defaults to 16.</span>
+<span class="sd">            overlap (int): Overlap of neighboring windows. Defaults to 7.</span>
+<span class="sd">            exponent (float): Filter strength, between 0.0 and 1.0. Defaults to 0.8.</span>
+<span class="sd">            normalize_power (bool): Normalize the power. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">afk_filter</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+            <span class="n">window_size</span><span class="o">=</span><span class="n">window_size</span><span class="p">,</span>
+            <span class="n">overlap</span><span class="o">=</span><span class="n">overlap</span><span class="p">,</span>
+            <span class="n">exponent</span><span class="o">=</span><span class="n">exponent</span><span class="p">,</span>
+            <span class="n">normalize_power</span><span class="o">=</span><span class="n">normalize_power</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blast.follow_phase"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.follow_phase">[docs]</a>    <span class="k">def</span> <span class="nf">follow_phase</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">pick_time</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+        <span class="n">pick_channel</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5e-1</span><span class="p">,</span>
+        <span class="n">max_shift</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">datetime</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Follow a phase pick through a Blast.</span>
+
+<span class="sd">        This function leverages the spatial coherency of a DAS data set. Following a</span>
+<span class="sd">        phase through iterative cross-correlation of neighboring traces:</span>
+
+<span class="sd">        1. Get windowed root pick template.</span>
+<span class="sd">        2. Calculate normalized cross correlate with downwards neighbor.</span>
+<span class="sd">        3. Evaluate maximum x-correlation in allowed window (max_shift).</span>
+<span class="sd">        4. Update template trace and go to 2.</span>
+
+<span class="sd">        5. Repeat for upward neighbors.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pick_time (datetime): Initial pick in the data set.</span>
+<span class="sd">            pick_channel (int): Corresponding channel for the initial pick.</span>
+<span class="sd">            window_size (int | tuple[int, int], optional): Window size around the pick</span>
+<span class="sd">                for the correlation template. If an integer is given it is the</span>
+<span class="sd">                half-width. A Tuple gives pre- and post-windows. Defaults to 50.</span>
+<span class="sd">            threshold (float, optional): Picking threshold for the cross correlation.</span>
+<span class="sd">                Defaults to 5e-1.</span>
+<span class="sd">            max_shift (int, optional): Maximum allowed shift in samples for</span>
+<span class="sd">                neighboring picks. Defaults to 20.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple[np.ndarray, list[datetime], np.ndarray]: Tuple of channel number,</span>
+<span class="sd">                pick time and maximum correlation coefficient.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">window_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">window_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">window_size</span><span class="p">,</span> <span class="n">window_size</span><span class="p">)</span>
+
+        <span class="n">pick_channel</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_channel</span>
+        <span class="n">root_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_to_sample</span><span class="p">(</span><span class="n">pick_time</span><span class="p">)</span>
+
+        <span class="c1"># Ensure the window is odd-sized with the pick in center.</span>
+        <span class="n">root_template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_trace</span><span class="p">(</span><span class="n">pick_channel</span><span class="p">)[</span>
+            <span class="n">root_idx</span> <span class="o">-</span> <span class="n">window_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span> <span class="n">root_idx</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">template_taper</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">windows</span><span class="o">.</span><span class="n">tukey</span><span class="p">(</span><span class="n">root_template</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+        <span class="n">pick_channels</span><span class="p">,</span> <span class="n">pick_times</span><span class="p">,</span> <span class="n">pick_correlations</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+
+        <span class="k">def</span> <span class="nf">prepare_template</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data</span> <span class="o">*</span> <span class="n">template_taper</span>
+
+        <span class="k">def</span> <span class="nf">correlate</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">direction</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">root_template</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">root_idx</span>
+
+            <span class="k">for</span> <span class="n">ichannel</span><span class="p">,</span> <span class="n">trace</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">prepare_template</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+                <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">template</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">trace</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+                <span class="n">correlation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">correlate</span><span class="p">(</span><span class="n">trace</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">)</span>
+                <span class="n">correlation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">correlation</span> <span class="o">/</span> <span class="n">norm</span><span class="p">)</span>
+
+                <span class="c1"># Take maximum only in allowed window</span>
+                <span class="n">phase_idx</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">correlation</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="n">max_shift</span> <span class="p">:</span> <span class="n">index</span> <span class="o">+</span> <span class="n">max_shift</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                    <span class="o">+</span> <span class="n">index</span>
+                    <span class="o">-</span> <span class="n">max_shift</span>
+                <span class="p">)</span>
+
+                <span class="n">phase_correlation</span> <span class="o">=</span> <span class="n">correlation</span><span class="p">[</span><span class="n">phase_idx</span><span class="p">]</span>
+                <span class="n">phase_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_to_time</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">phase_idx</span><span class="p">))</span>
+
+                <span class="k">if</span> <span class="n">phase_correlation</span> <span class="o">&lt;</span> <span class="n">threshold</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Avoid the edges</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">window_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">phase_idx</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">-</span> <span class="n">window_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">pick_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">phase_time</span><span class="p">)</span>
+                <span class="n">pick_channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pick_channel</span> <span class="o">+</span> <span class="n">ichannel</span> <span class="o">*</span> <span class="n">direction</span><span class="p">)</span>
+                <span class="n">pick_correlations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">phase_correlation</span><span class="p">)</span>
+
+                <span class="n">template</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span>
+                    <span class="n">phase_idx</span> <span class="o">-</span> <span class="n">window_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span> <span class="n">phase_idx</span> <span class="o">+</span> <span class="n">window_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">phase_idx</span>
+
+        <span class="n">correlate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">pick_channel</span><span class="p">:])</span>
+        <span class="n">correlate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:</span> <span class="n">pick_channel</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">direction</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">pick_channels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pick_channels</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_channel</span>
+        <span class="n">pick_correlations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pick_correlations</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pick_channels</span><span class="p">,</span> <span class="n">pick_times</span><span class="p">,</span> <span class="n">pick_correlations</span></div>
+
+<div class="viewcode-block" id="Blast.taper"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.taper">[docs]</a>    <span class="k">def</span> <span class="nf">taper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Taper in time-domain and in-place with a Tukey window.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            alpha (float, optional): Shape parameter of the Tukey window, representing</span>
+<span class="sd">                the fraction of the window inside the cosine tapered region.</span>
+<span class="sd">                If zero, the Tukey window is equivalent to a rectangular window.</span>
+<span class="sd">                If one, the Tukey window is equivalent to a Hann window.</span>
+<span class="sd">                Defaults to 0.05.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">window</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">windows</span><span class="o">.</span><span class="n">tukey</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">*=</span> <span class="n">window</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span></div>
+
+<div class="viewcode-block" id="Blast.one_bit_normalization"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.one_bit_normalization">[docs]</a>    <span class="k">def</span> <span class="nf">one_bit_normalization</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply one-bit normalization on the trace.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blast.mute_median"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.mute_median">[docs]</a>    <span class="k">def</span> <span class="nf">mute_median</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Mute signals in the data above a threshold in-place.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            level (float, optional): Median level to mute. Defaults to 3.0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">envelope</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">hilbert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">envelope</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">cutoff_level</span> <span class="o">=</span> <span class="n">level</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">levels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">envelope</span> <span class="o">&gt;</span> <span class="n">cutoff_level</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span></div>
+
+<div class="viewcode-block" id="Blast.trim_channels"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.trim_channels">[docs]</a>    <span class="k">def</span> <span class="nf">trim_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">begin</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Blast</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Trim the Blast to channels and return a copy.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            begin (int, optional): Begin channel. Defaults to 0.</span>
+<span class="sd">            end (int, optional): End channel. Defaults to -1.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Blast: Trimmed Blast.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">blast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">blast</span><span class="o">.</span><span class="n">start_channel</span> <span class="o">+=</span> <span class="n">begin</span>
+        <span class="n">blast</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">blast</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">begin</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">blast</span></div>
+
+<div class="viewcode-block" id="Blast.trim_time"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.trim_time">[docs]</a>    <span class="k">def</span> <span class="nf">trim_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">begin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Blast</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Trim channel to time frame and return a copy.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            begin (float, optional): Begin time. Defaults to 0.0.</span>
+<span class="sd">            end (float, optional): End time. Defaults to -1.0.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: Raised when begin and end are ill behaved.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Blast: Trimmed Blast.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">end</span> <span class="o">&lt;</span> <span class="n">begin</span> <span class="ow">and</span> <span class="n">end</span> <span class="o">!=</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Begin sample has to be before end&quot;</span><span class="p">)</span>
+        <span class="n">blast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">start_sample</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">begin</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_t</span><span class="p">)</span>
+        <span class="n">end_sample</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">end</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_t</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">blast</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">blast</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">start_sample</span><span class="p">:</span><span class="n">end_sample</span><span class="p">]</span>
+        <span class="n">blast</span><span class="o">.</span><span class="n">start_time</span> <span class="o">+=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">begin</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">blast</span></div>
+
+<div class="viewcode-block" id="Blast.to_strain"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.to_strain">[docs]</a>    <span class="k">def</span> <span class="nf">to_strain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detrend</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Blast</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the traces to strain.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            detrend (bool, optional): Detrend trace before integration.</span>
+<span class="sd">                Defaults to True.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: Raised when the input Blast is not in strain rate.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Blast: In strain strain.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;strain&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">!=</span> <span class="s2">&quot;strain rate&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Blast has a bad unit </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="si">}</span><span class="s2">, expected &#39;strain_rate&#39;&quot;</span><span class="p">)</span>
+        <span class="n">blast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">detrend</span><span class="p">:</span>
+            <span class="n">blast</span><span class="o">.</span><span class="n">detrend</span><span class="p">()</span>
+        <span class="n">blast</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">blast</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">blast</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;strain&quot;</span>
+        <span class="k">return</span> <span class="n">blast</span></div>
+
+<div class="viewcode-block" id="Blast.to_relative_velocity"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.to_relative_velocity">[docs]</a>    <span class="k">def</span> <span class="nf">to_relative_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detrend</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Blast</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the traces to relative velocity.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            detrend (bool, optional): Detrend trace before spatial differentiation.</span>
+<span class="sd">                Defaults to True.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: Raised when the input blast is not in strain rate.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Blast: As relative velocity.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">blast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_strain</span><span class="p">(</span><span class="n">detrend</span><span class="o">=</span><span class="n">detrend</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">detrend</span><span class="p">:</span>
+            <span class="n">blast</span><span class="o">.</span><span class="n">detrend</span><span class="p">()</span>
+        <span class="n">blast</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">blast</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">blast</span><span class="o">.</span><span class="n">channel_spacing</span>
+        <span class="n">blast</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;velocity&quot;</span>
+        <span class="k">return</span> <span class="n">blast</span></div>
+
+<div class="viewcode-block" id="Blast.to_relative_displacement"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.to_relative_displacement">[docs]</a>    <span class="k">def</span> <span class="nf">to_relative_displacement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detrend</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Blast</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the traces to relative displacement.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            detrend (bool, optional): Detrend trace before spatial integration.</span>
+<span class="sd">                Defaults to True.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: Raised when the input Blast is not in strain rate.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Blast: As strain strain.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">blast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_strain</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">detrend</span><span class="p">:</span>
+            <span class="n">blast</span><span class="o">.</span><span class="n">detrend</span><span class="p">()</span>
+        <span class="n">blast</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">blast</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">blast</span><span class="o">.</span><span class="n">channel_spacing</span>
+        <span class="n">blast</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;displacement&quot;</span>
+        <span class="k">return</span> <span class="n">blast</span></div>
+
+<div class="viewcode-block" id="Blast.plot"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">axes</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">normalize_traces</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Colormap</span> <span class="o">=</span> <span class="s2">&quot;seismic&quot;</span><span class="p">,</span>
+        <span class="n">show_date</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">show_channel</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">image</span><span class="o">.</span><span class="n">AxesImage</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot data of the blast.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            axes (plt.Axes | None, optional): Optional axis to plot into. If not given,</span>
+<span class="sd">                `plt.show()` is called. Defaults to None.</span>
+<span class="sd">            normalize_traces (bool, optional): Normalize traces in time dimension.</span>
+<span class="sd">                Defaults to True.</span>
+<span class="sd">            cmap (str | Colormap, optional): Matplotlib colormap. Defaults to &quot;seismic&quot;.</span>
+<span class="sd">            show_date (bool, optional): Shot absolute dates in UTC. Defaults to False.</span>
+<span class="sd">            show_channel (bool, optional): Show channels instead of meters.</span>
+<span class="sd">                Defaults to False.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            image.AxesImage: Decorated axes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span>
+
+        <span class="n">d_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_spacing</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">d_channel</span><span class="p">:</span>
+            <span class="n">show_channel</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">extent</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start_channel</span> <span class="k">if</span> <span class="n">show_channel</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_channel</span> <span class="o">*</span> <span class="n">d_channel</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">end_channel</span> <span class="k">if</span> <span class="n">show_channel</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_channel</span> <span class="o">*</span> <span class="n">d_channel</span><span class="p">,</span>
+            <span class="n">dates</span><span class="o">.</span><span class="n">date2num</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">show_date</span>
+            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_t</span><span class="p">,</span>
+            <span class="n">dates</span><span class="o">.</span><span class="n">date2num</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">)</span> <span class="k">if</span> <span class="n">show_date</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">normalize_traces</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+        <span class="n">img</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+            <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+            <span class="c1"># interpolation=&quot;nearest&quot;,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+            <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
+            <span class="n">norm</span><span class="o">=</span><span class="n">colors</span><span class="o">.</span><span class="n">CenteredNorm</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">show_date</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Time UTC&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">yaxis_date</span><span class="p">()</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Distance [m]&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">show_channel</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Channel #&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">img</span></div>
+
+<div class="viewcode-block" id="Blast.copy"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Blast</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a copy of the blast.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Blast: Copied blast.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blast.save_mseed"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.save_mseed">[docs]</a>    <span class="k">def</span> <span class="nf">save_mseed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="n">PathStr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save the Blast as miniSeed.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename (PathStr): File to write to.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">io</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">as_traces</span><span class="p">(),</span> <span class="n">filename_template</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;mseed&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blast.as_traces"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.as_traces">[docs]</a>    <span class="k">def</span> <span class="nf">as_traces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trace</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts the data in the Blast object into Pyrocko&#39;s Trace format.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[Trace]: A list of Pyrocko Trace instances,</span>
+<span class="sd">                one for each channel in the data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">traces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">icha</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_channels</span><span class="p">):</span>
+            <span class="n">channel</span> <span class="o">=</span> <span class="n">icha</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_channel</span>
+            <span class="n">traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Trace</span><span class="p">(</span>
+                    <span class="n">ydata</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">icha</span><span class="p">],</span>
+                    <span class="n">tmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(),</span>
+                    <span class="n">deltat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">delta_t</span><span class="p">,</span>
+                    <span class="n">station</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">channel</span><span class="si">:</span><span class="s2">05d</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">traces</span></div>
+
+<div class="viewcode-block" id="Blast.from_pyrocko"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.from_pyrocko">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_pyrocko</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">traces</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trace</span><span class="p">],</span> <span class="n">channel_spacing</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">4.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Blast</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create Blast from a list of Pyrocko traces.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            traces (list[Trace]): List of input traces</span>
+<span class="sd">            channel_spacing (float, optional): Spatial channel spacing in meter.</span>
+<span class="sd">                Defaults to 0.0.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If input is odd.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Blast: Assembled Blast.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">traces</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Empty list of traces&quot;</span><span class="p">)</span>
+
+        <span class="n">traces</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">traces</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">tr</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">station</span><span class="p">))</span>
+        <span class="n">ntraces</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">traces</span><span class="p">)</span>
+
+        <span class="n">tmin</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">delta_t</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">nsamples</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">traces</span><span class="p">:</span>
+            <span class="n">tmin</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">tmin</span><span class="p">)</span>
+            <span class="n">delta_t</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">deltat</span><span class="p">)</span>
+            <span class="n">dtype</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">ydata</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="n">nsamples</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">ydata</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">delta_t</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sampling rate differs </span><span class="si">{</span><span class="n">delta_t</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nsamples</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Traces number of samples differ </span><span class="si">{</span><span class="n">nsamples</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dtypes of traces differ </span><span class="si">{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmin</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">tmin</span><span class="p">)))</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">1e4</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Trace tmin differ </span><span class="si">{</span><span class="n">tmin</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">ntraces</span><span class="p">,</span> <span class="n">nsamples</span><span class="o">.</span><span class="n">pop</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">itr</span><span class="p">,</span> <span class="n">tr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">traces</span><span class="p">):</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">itr</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">ydata</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+            <span class="n">start_time</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">tmin</span><span class="o">.</span><span class="n">pop</span><span class="p">(),</span> <span class="n">tz</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">),</span>
+            <span class="n">sampling_rate</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">delta_t</span><span class="o">.</span><span class="n">pop</span><span class="p">()),</span>
+            <span class="n">start_channel</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">tr</span><span class="o">.</span><span class="n">station</span><span class="p">)</span> <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">traces</span><span class="p">),</span>
+            <span class="n">channel_spacing</span><span class="o">=</span><span class="n">channel_spacing</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blast.from_miniseed"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Blast.from_miniseed">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_miniseed</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="n">PathStr</span><span class="p">,</span> <span class="n">channel_spacing</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">4.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Blast</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load Blast from miniSEED.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file (PathStr): miniSEED file to load from.</span>
+<span class="sd">            channel_spacing (float, optional): Channel spacing in meters.</span>
+<span class="sd">                Defaults to 4.0.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Blast: Produced Blast.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">pyrocko</span> <span class="kn">import</span> <span class="n">io</span>
+
+        <span class="n">traces</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;mseed&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_pyrocko</span><span class="p">(</span><span class="n">traces</span><span class="p">,</span> <span class="n">channel_spacing</span><span class="o">=</span><span class="n">channel_spacing</span><span class="p">)</span></div></div>
+
+
+<span class="n">TFun</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;TFun&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">shared_function</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">TFun</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TFun</span><span class="p">:</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Pack</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">blast</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blasts</span><span class="p">:</span>
+            <span class="n">func</span><span class="p">(</span><span class="n">blast</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wrapper</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">wrapper</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="n">wrapper</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Blast&quot;</span><span class="p">,</span> <span class="s2">&quot;Pack&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">TFun</span><span class="p">,</span> <span class="n">wrapper</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Pack"><a class="viewcode-back" href="../../reference/index.html#lightguide.blast.Pack">[docs]</a><span class="k">class</span> <span class="nc">Pack</span><span class="p">:</span>
+    <span class="n">blasts</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">Blast</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blasts</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Blast</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blasts</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="o">*</span><span class="n">blasts</span><span class="p">)</span> <span class="k">if</span> <span class="n">blasts</span> <span class="k">else</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_blasts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blasts</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blast</span><span class="p">:</span> <span class="n">Blast</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blasts</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">blast</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blasts</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Blast</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">blast</span> <span class="ow">in</span> <span class="n">blasts</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">blast</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">start_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">blast</span><span class="o">.</span><span class="n">start_time</span> <span class="k">for</span> <span class="n">blast</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blasts</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">end_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">blast</span><span class="o">.</span><span class="n">end_time</span> <span class="k">for</span> <span class="n">blast</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blasts</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pack</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Blast</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blasts</span><span class="p">)[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Blast</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">blasts</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blast</span><span class="p">:</span> <span class="n">Blast</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">blast</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blasts</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_blasts</span>
+
+    <span class="n">taper</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">taper</span><span class="p">)</span>
+    <span class="n">detrend</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">detrend</span><span class="p">)</span>
+    <span class="n">lowpass</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">lowpass</span><span class="p">)</span>
+    <span class="n">highpass</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">highpass</span><span class="p">)</span>
+    <span class="n">bandpass</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">bandpass</span><span class="p">)</span>
+    <span class="n">afk_filter</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">afk_filter</span><span class="p">)</span>
+    <span class="n">decimate</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">decimate</span><span class="p">)</span>
+
+    <span class="n">trim_time</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">trim_time</span><span class="p">)</span>
+    <span class="n">trim_channels</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">trim_channels</span><span class="p">)</span>
+
+    <span class="n">mute_median</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">mute_median</span><span class="p">)</span>
+    <span class="n">one_bit_normalization</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">one_bit_normalization</span><span class="p">)</span>
+    <span class="n">afk_filter</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">afk_filter</span><span class="p">)</span>
+    <span class="n">decimate</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">decimate</span><span class="p">)</span>
+
+    <span class="n">trim_time</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">trim_time</span><span class="p">)</span>
+    <span class="n">trim_channels</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">trim_channels</span><span class="p">)</span>
+
+    <span class="n">to_strain</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">to_strain</span><span class="p">)</span>
+    <span class="n">to_relative_velocity</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">to_relative_velocity</span><span class="p">)</span>
+    <span class="n">to_relative_displacement</span> <span class="o">=</span> <span class="n">shared_function</span><span class="p">(</span><span class="n">Blast</span><span class="o">.</span><span class="n">to_relative_displacement</span><span class="p">)</span></div>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Marius Paul Isken
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link " href="https://github.com/pyrocko/lightguide" aria-label="GitHub">
+                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+                </svg>
+            </a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    </body>
+</html>

@@ -329,7 +329,7 @@ class Blast:
         pick_channel: int,
         window_size: int | tuple[int, int] = 50,
         threshold: float = 5e-1,
-        max_shift: int = 50,
+        max_shift: int = 20,
     ) -> tuple[np.ndarray, list[datetime], np.ndarray]:
         """Follow a phase pick through a Blast.
 
@@ -353,7 +353,7 @@ class Blast:
             threshold (float, optional): Picking threshold for the cross correlation.
                 Defaults to 5e-1.
             max_shift (int, optional): Maximum allowed shift for neighboring picks.
-                Defaults to 50.
+                Defaults to 20.
 
         Returns:
             tuple[np.ndarray, list[datetime], np.ndarray]: Tuple of channel number,
@@ -362,10 +362,14 @@ class Blast:
         if isinstance(window_size, int):
             window_size = (window_size, window_size)
 
+        pick_channel -= self.start_channel
+
         root_idx = self._time_to_sample(pick_time)
+
+        # Ensure the window is odd-sized with the pick in center.
         root_template = self.get_trace(pick_channel)[
-            root_idx - window_size[0] : root_idx + window_size[1]
-        ]
+            root_idx - window_size[0] : root_idx + window_size[1] + 1
+        ].copy()
         template_taper = signal.windows.tukey(root_template.size, alpha=0.1)
 
         pick_channels, pick_times, pick_correlations = [], [], []
@@ -385,17 +389,19 @@ class Blast:
 
                 # Take maximum only in allowed window
                 phase_idx = (
-                    np.argmax(correlation[index - max_shift : index + max_shift])
+                    np.argmax(correlation[index - max_shift : index + max_shift + 1])
                     + index
                     - max_shift
                 )
+
                 phase_correlation = correlation[phase_idx]
                 phase_time = self._sample_to_time(int(phase_idx))
 
                 if phase_correlation < threshold:
                     continue
 
-                if not max_shift < phase_idx < self.n_samples - max_shift:
+                # Avoid the edges
+                if not window_size[0] < phase_idx < self.n_samples - window_size[1]:
                     continue
 
                 pick_times.append(phase_time)
@@ -403,8 +409,8 @@ class Blast:
                 pick_correlations.append(phase_correlation)
 
                 template = trace[
-                    phase_idx - window_size[0] : phase_idx + window_size[1]
-                ]
+                    phase_idx - window_size[0] : phase_idx + window_size[1] + 1
+                ].copy()
                 index = phase_idx
 
         correlate(self.data[pick_channel:])
@@ -549,10 +555,26 @@ class Blast:
     def plot(
         self,
         axes: plt.Axes | None = None,
+        normalize_traces: bool = True,
         cmap: str | Colormap = "seismic",
         show_date: bool = False,
         show_channel: bool = False,
     ) -> image.AxesImage:
+        """Plot data of the blast.
+
+        Args:
+            axes (plt.Axes | None, optional): Optional axis to plot into. If not given,
+                `plt.show()` is called. Defaults to None.
+            normalize_traces (bool, optional): Normalize traces in time dimension.
+                Defaults to True.
+            cmap (str | Colormap, optional): Matplotlib colormap. Defaults to "seismic".
+            show_date (bool, optional): Shot absolute dates in UTC. Defaults to False.
+            show_channel (bool, optional): Show channels instead of meters.
+                Defaults to False.
+
+        Returns:
+            image.AxesImage: Decorated axes.
+        """
         if axes is None:
             fig, ax = plt.subplots()
         else:
@@ -570,8 +592,12 @@ class Blast:
             dates.date2num(self.start_time) if show_date else 0.0,
         )
 
+        data = self.data.copy()
+        if normalize_traces:
+            data /= np.abs(data.max(axis=1, keepdims=True))
+
         img = ax.imshow(
-            self.data.T,
+            data.T,
             aspect="auto",
             # interpolation="nearest",
             cmap=cmap,

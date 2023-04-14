@@ -24,7 +24,7 @@ class ExampleData:
         )
 
     @classmethod
-    def vsp(cls) -> Blast:
+    def vsp_shot(cls) -> Blast:
         file = cache_dir() / "vsp-data.npy"
         if not file.exists():
             download_http(cls.VSPDataUrl, file)

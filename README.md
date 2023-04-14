@@ -2,17 +2,16 @@
 
 *Tools for distributed acoustic sensing and modelling.*
 
-![PyPI](https://img.shields.io/pypi/v/lightguide)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/lightguide)](https://pypi.org/project/lightguide)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://pre-commit.com/)
+[![PyPI](https://img.shields.io/pypi/v/lightguide)](https://pypi.org/project/lightguide/)
+[![build](https://github.com/pyrocko/lightguide/actions/workflows/build.yml/badge.svg)](https://github.com/pyrocko/lightguide/actions/workflows/build.yml)
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
-[![CI](https://github.com/pyrocko/lightguide/actions/workflows/build.yml/badge.svg)](https://github.com/pyrocko/lightguide/actions/workflows/build.yml)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://pre-commit.com/)
 
 Lightguide is a package for handling, filtering and modelling distributed acoustic sensing (DAS) data. The package interfaces handling and processing routines of DAS data to the [Pyrocko framework](https://pyrocko.org). Through Pyrocko's I/O engine :rocket: lightguide supports handling the following DAS data formats:
 
+- MiniSEED
 - Silixa iDAS (TDMS data)
 - ASN OptoDAS
-- MiniSEED
 
 Numerical forward modelling of various dislocation sources in layered and homogeneous half-space towards DAS strain and strain-rate is employed through Pyrocko-Green's function package.
 
@@ -28,22 +27,22 @@ pip install lightguide
 
 ## Usage
 
+### Documentation
+
+Find the [documentation here](https://pyrocko.github.io/lightguide/).
+
 ### Adaptive frequency filter
 
 The adaptive frequency filter (AFK) can be used to suppress incoherent noise in DAS data sets.
 
-```python
-from lightguide import filters
-from lightguide.utils import download_numpy, ExampleData
+```py
+from lightguide.blast import Blast
 
-
-das_data = download_numpy(ExampleData.VSPData)
-
-filtered_data = filters.afk_filter(
-    das_data, window_size=32, overlap=15, exponent=0.8, normalize_power=False)
+blast = Blast.from_miniseed("my-data.mseed")
+blast.lowpass(corner_freq=60.0)
+blast.afk_filter(exponent=0.8)
 ```
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/pyrocko/lightguide/blob/master/examples/1-denoise-DAS-data.ipynb)
 
 The filtering performance of the AFK filter, applied to an earthquake recording at an [ICDP](https://www.icdp-online.org/home/) borehole observatory in Germany. The data was recorded on a [Silixa](https://silixa.com/) iDAS v2. For more details see <https://doi.org/10.5880/GFZ.2.1.2022.006>.
 
@@ -97,6 +96,7 @@ maturin develop
 The project utilizes pre-commit for clean commits, install the hooks via:
 
 ```sh
+pip install pre-commit
 pre-commit install
 ```
 

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import timedelta
+
 import matplotlib.pyplot as plt
 import numpy as np
 from pyrocko.trace import Trace
@@ -29,6 +31,10 @@ def test_signaling(random_blast: Blast, show_plot: bool):
     check_identity(torrent, "Detrend")
 
     torrent = orig_blast.copy()
+    torrent.afk_filter()
+    check_identity(torrent, "afk filter")
+
+    torrent = orig_blast.copy()
     torrent.lowpass(0.1)
     check_identity(torrent, "Lowpass")
 
@@ -54,7 +60,8 @@ def test_signaling(random_blast: Blast, show_plot: bool):
 
 
 def test_from_pyrocko():
-    trace = Trace(ydata=np.random.randint(-1000, 1000, size=1000), station="123")
+    rng = np.random.default_rng()
+    trace = Trace(ydata=rng.integers(-1000, 1000, size=1000), station="123")
     Blast.from_pyrocko([trace] * 20)
 
 
@@ -64,3 +71,28 @@ def test_normalizations(random_blast: Blast):
 
     torrent = random_blast.copy()
     torrent.mute_median()
+
+
+def test_follow_phase(blast_eq: Blast, show_plot):
+    blast_eq.afk_filter()
+    blast_eq.lowpass(5.0)
+
+    pick_second = 17.34
+    pick_time = blast_eq.start_time + timedelta(seconds=pick_second)
+    pick_channel = 350
+
+    pick_channels, pick_times, pick_correlation = blast_eq.follow_phase(
+        pick_time, pick_channel
+    )
+
+    if show_plot:
+        import matplotlib.pyplot as plt
+
+        fig = plt.figure()
+        ax = fig.gca()
+
+        ax.scatter(pick_channel, pick_time, marker="x", c="green")
+        blast_eq.plot(axes=ax, show_date=True)
+        ax.scatter(pick_channels, pick_times)
+        print(pick_times)
+        plt.show()

@@ -1,23 +1,14 @@
-from pathlib import Path
-
 import numpy as np
 import pytest
 
-from lightguide import filters, utils
-
-
-@pytest.fixture
-def data(data_dir: Path):
-    filename = data_dir / "data-DAS-gfz2020wswf.npy"
-    if not filename.exists():
-        utils.download_http(utils.ExampleData.EQData, filename)
-    return np.load(filename)
+from lightguide import filters
 
 
 @pytest.fixture
 def data_big():
     n = 2048
-    return np.random.uniform(size=(n, n)).astype(np.float32)
+    rng = np.random.default_rng()
+    return rng.uniform(size=(n, n)).astype(np.float32)
 
 
 def test_taper():
@@ -51,25 +42,25 @@ def test_benchmark_goldstein_rust(benchmark, data_big):
     benchmark(filters.afk_filter, data_big, 32, 14, 0.5, False)
 
 
-def test_goldstein_rust(data):
+def test_goldstein_rust(data_eq: np.ndarray):
     filtered_data_rust = filters.afk_filter(
-        data, 32, 14, exponent=0.0, normalize_power=False
+        data_eq, 32, 14, exponent=0.0, normalize_power=False
     )
 
     filtered_data_rust_rect = filters.afk_filter_rectangular(
-        data, (32, 32), (14, 14), exponent=0.0, normalize_power=False
+        data_eq, (32, 32), (14, 14), exponent=0.0, normalize_power=False
     )
     np.testing.assert_almost_equal(filtered_data_rust_rect, filtered_data_rust)
-    np.testing.assert_allclose(data, filtered_data_rust, rtol=1.0)
+    np.testing.assert_allclose(data_eq, filtered_data_rust, rtol=1.0)
 
     filtered_data_rust_rect = filters.afk_filter_rectangular(
-        data, (32, 16), (14, 7), exponent=0.0, normalize_power=False
+        data_eq, (32, 16), (14, 7), exponent=0.0, normalize_power=False
     )
 
     filtered_data_rust_rect = filters.afk_filter_rectangular(
-        data, (32, 128), (14, 56), exponent=0.0, normalize_power=False
+        data_eq, (32, 128), (14, 56), exponent=0.0, normalize_power=False
     )
 
     filtered_data_rust_rect = filters.afk_filter_rectangular(
-        data, (32, 200), (14, 80), exponent=0.0, normalize_power=False
+        data_eq, (32, 200), (14, 80), exponent=0.0, normalize_power=False
     )

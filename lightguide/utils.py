@@ -1,29 +1,29 @@
 from __future__ import annotations
 
+import logging
 import time
 from functools import wraps
 from pathlib import Path
 from tempfile import SpooledTemporaryFile
-from typing import Any, Callable
+from typing import Any, Callable, Union
 
 import numpy as np
 import requests
 
-PathStr = Path | str
-
-
-class ExampleData:
-    VSPData = "https://data.pyrocko.org/testing/lightguide/das-data.npy"
-    EQData = "https://data.pyrocko.org/testing/lightguide/data-DAS-gfz2020wswf.npy"
-
-
-class AttrDict(dict):
-    def __init__(self, *args, **kwargs) -> None:
-        super(AttrDict, self).__init__(*args, **kwargs)
-        self.__dict__ = self
+PathStr = Union[Path, str]
 
 
 def download_http(url: str, target: Path | SpooledTemporaryFile) -> None:
+    """Helper function for downloading data from HTTP.
+
+    Args:
+        url (str): URL to download data from.
+        target (Path | SpooledTemporaryFile): File to dump data to.
+
+    Raises:
+        OSError: Raised when target exists.
+        TypeError: Raised when target is ill defined.
+    """
     req = requests.get(url)
     req.raise_for_status()
     total_size = int(req.headers.get("Content-Length", 0))
@@ -33,9 +33,9 @@ def download_http(url: str, target: Path | SpooledTemporaryFile) -> None:
         if target.exists():
             raise OSError(f"File {target} already exists")
 
-        def file_writer(data: bytes):
-            with target.open("ab") as f:
-                f.write(data)
+        def file_writer(data: bytes) -> None:
+            with target.open("ab") as file:
+                file.write(data)
 
         writer = file_writer
 
@@ -53,11 +53,27 @@ def download_http(url: str, target: Path | SpooledTemporaryFile) -> None:
 
 
 def download_numpy(url: str) -> np.ndarray:
+    """Helper function downloading a .npy file
+
+    Args:
+        url (str): URL to NumPy file
+
+    Returns:
+        np.ndarray: Retrieved numpy array
+    """
     file = SpooledTemporaryFile()
     download_http(url, target=file)
     file.flush()
     file.seek(0)
     return np.load(file)
+
+
+def cache_dir() -> Path:
+    cache = Path.home() / ".cache" / "lightguide"
+    if not cache.exists():
+        logging.info("Creating cache dir %s", cache)
+        cache.mkdir(parents=True)
+    return cache
 
 
 def timeit(func: Callable) -> Callable:

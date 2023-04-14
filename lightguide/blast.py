@@ -336,24 +336,23 @@ class Blast:
         This function leverages the spatial coherency of a DAS data set. Following a
         phase through iterative cross-correlation of neighboring traces:
 
-            1. Get windowed root pick template.
-            2. Calculate normalized cross correlate with downwards neighbor.
-            3. Evaluate maximum x-correlation in allowed window (max_shift).
-            4. Update template trace and go to 2.
+        1. Get windowed root pick template.
+        2. Calculate normalized cross correlate with downwards neighbor.
+        3. Evaluate maximum x-correlation in allowed window (max_shift).
+        4. Update template trace and go to 2.
 
-            5. Repeat for upward neighbors.
-            6. Profit.
+        5. Repeat for upward neighbors.
 
         Args:
             pick_time (datetime): Initial pick in the data set.
             pick_channel (int): Corresponding channel for the initial pick.
             window_size (int | tuple[int, int], optional): Window size around the pick
-                for the correlation. If an integer is given it is the half-width.
-                A Tuple gives pre- and post-windows. Defaults to 50.
+                for the correlation template. If an integer is given it is the
+                half-width. A Tuple gives pre- and post-windows. Defaults to 50.
             threshold (float, optional): Picking threshold for the cross correlation.
                 Defaults to 5e-1.
-            max_shift (int, optional): Maximum allowed shift for neighboring picks.
-                Defaults to 20.
+            max_shift (int, optional): Maximum allowed shift in samples for
+                neighboring picks. Defaults to 20.
 
         Returns:
             tuple[np.ndarray, list[datetime], np.ndarray]: Tuple of channel number,
@@ -363,7 +362,6 @@ class Blast:
             window_size = (window_size, window_size)
 
         pick_channel -= self.start_channel
-
         root_idx = self._time_to_sample(pick_time)
 
         # Ensure the window is odd-sized with the pick in center.

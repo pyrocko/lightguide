@@ -9,6 +9,7 @@ from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
+    Deque,
     Iterable,
     Iterator,
     Literal,
@@ -23,6 +24,7 @@ from matplotlib.colors import Colormap
 from pyrocko import io
 from pyrocko.trace import Trace
 from scipy import signal
+import re
 
 from lightguide.utils import PathStr
 
@@ -331,8 +333,7 @@ class Blast:
         window_size: int | tuple[int, int] = 50,
         threshold: float = 5e-1,
         max_shift: int = 20,
-        stack: bool = False,
-        no_of_stacks: int = 5,
+        no_of_stacks: int = 1,
     ) -> tuple[np.ndarray, list[datetime], np.ndarray]:
         """Follow a phase pick through a Blast.
 
@@ -343,7 +344,7 @@ class Blast:
         2. Calculate normalized cross correlate with downwards neighbor.
         3. Evaluate maximum x-correlation in allowed window (max_shift).
         4. Update template trace and go to 2.
-            4a. if stack=True: stack templates for correlation to stabilize
+            4a. if no_of_stacks >1: stack templates for correlation to stabilize
         5. Repeat for upward neighbors.
 
         Args:
@@ -356,12 +357,10 @@ class Blast:
                 Defaults to 5e-1.
             max_shift (int, optional): Maximum allowed shift in samples for
                 neighboring picks. Defaults to 20.
-            stack (bool): If True - (a default number of 5) templates will be stacked and used
-                as correlation template. Stacking close to the initial template is limited to
-                the distance to the initial tamplate. I.e. the correlation of a trace 3 traces
-                next to the initial template will only use a stacked template of 3 traces
-                (initial trace an trace 1 and 2 next to it), altough the no_of_stacks is set higher.
-            no_of_stacks (int): Numbers of traces to stack to define the template.
+            no_of_stacks (int): Numbers of traces to stack to define the template. Default is 1,
+                i.e. a single trace.
+                Stacking close to root template is limited by the distance to the
+                root template.
 
         Returns:
             tuple[np.ndarray, list[datetime], np.ndarray]: Tuple of channel number,
@@ -371,6 +370,7 @@ class Blast:
             window_size = (window_size, window_size)
 
         pick_channel -= self.start_channel
+
         root_idx = self._time_to_sample(pick_time)
 
         # Ensure the window is odd-sized with the pick in center.
@@ -382,23 +382,18 @@ class Blast:
         pick_channels, pick_times, pick_correlations = [], [], []
 
         def prepare_template(data: np.ndarray) -> np.ndarray:
+            data = np.sum(data, axis=0) / len(data)
             return data * template_taper
-
-        # def stack_n_straces(data: np.ndarray,stack_traces) -> np.ndarray:
-
-        #     return stacked_data
 
         def correlate(data: np.ndarray, direction: Literal[1, -1] = 1) -> None:
             template = root_template.copy()
-            template_deque = deque([np.array(template)])
+            template_stack: Deque[np.ndarray] = deque(
+                [np.array(template)], maxlen=no_of_stacks
+            )
 
             index = root_idx
             for ichannel, trace in enumerate(data):
-                template = prepare_template(template)
-                # check if stacking is activated
-                if stack and len(template_deque) > 2:
-                    template = prepare_template(template_stack)
-
+                template = prepare_template(template_stack)
                 norm = np.sqrt(np.sum(template**2)) * np.sqrt(np.sum(trace**2))
                 correlation = np.correlate(trace, template, mode="same")
                 correlation = np.abs(correlation / norm)
@@ -413,7 +408,7 @@ class Blast:
                 phase_correlation = correlation[phase_idx]
                 phase_time = self._sample_to_time(int(phase_idx))
 
-                if phase_correlation > threshold:
+                if phase_correlation < threshold:
                     continue
 
                 # Avoid the edges
@@ -429,12 +424,7 @@ class Blast:
                 ].copy()
 
                 # stacking
-                if len(template_deque) <= no_of_stacks:
-                    template_deque.append(template)
-                if len(template_deque) == no_of_stacks + 1:
-                    template_deque.popleft()
-                template_stack = np.sum(template_deque, axis=0) / len(template_deque)
-
+                template_stack.append(template)
                 index = phase_idx
 
         correlate(self.data[pick_channel:])
@@ -696,7 +686,7 @@ class Blast:
         if not traces:
             raise ValueError("Empty list of traces")
 
-        traces = sorted(traces, key=lambda tr: int(tr.station))
+        traces = sorted(traces, key=lambda tr: int(re.sub(r"\D", "", tr.station)))
         ntraces = len(traces)
 
         tmin = set()
@@ -727,7 +717,7 @@ class Blast:
             data=data,
             start_time=datetime.fromtimestamp(tmin.pop(), tz=timezone.utc),
             sampling_rate=int(1.0 / delta_t.pop()),
-            start_channel=min(int(tr.station) for tr in traces),
+            start_channel=min(int(re.sub(r"\D", "", tr.station)) for tr in traces),
             channel_spacing=channel_spacing,
         )
 

@@ -31,7 +31,6 @@ from lightguide.models.picks import *
 
 from .filters import afk_filter
 from .signal import decimation_coefficients
-from .spectrogram import get_spectrogram
 
 if TYPE_CHECKING:
     from matplotlib import image
@@ -832,17 +831,12 @@ class Pack:
     bandpass = shared_function(Blast.bandpass)
     afk_filter = shared_function(Blast.afk_filter)
     decimate = shared_function(Blast.decimate)
-    # why some functions two times??
+
     trim_time = shared_function(Blast.trim_time)
     trim_channels = shared_function(Blast.trim_channels)
 
     mute_median = shared_function(Blast.mute_median)
     one_bit_normalization = shared_function(Blast.one_bit_normalization)
-    afk_filter = shared_function(Blast.afk_filter)
-    decimate = shared_function(Blast.decimate)
-
-    trim_time = shared_function(Blast.trim_time)
-    trim_channels = shared_function(Blast.trim_channels)
 
     to_strain = shared_function(Blast.to_strain)
     to_relative_velocity = shared_function(Blast.to_relative_velocity)

@@ -34,7 +34,8 @@ class Picks(BaseModel):
             markers.append(m)
         marker.save_markers(markers=markers, filename=filename)
 
-    def get_pyrocko_picks(self, filename):
+    @classmethod
+    def from_pyrocko_picks(cls, filename):
         """
         Loads pyrocko picks from file.
 

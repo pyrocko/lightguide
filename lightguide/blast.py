@@ -21,15 +21,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import colors, dates
 from matplotlib.colors import Colormap
-from pyrocko import io
+from pyrocko import io, marker
 from pyrocko.trace import Trace
 from scipy import signal
 import re
 
 from lightguide.utils import PathStr
+from lightguide.models.picks import *
 
 from .filters import afk_filter
 from .signal import decimation_coefficients
+from .spectrogram import get_spectrogram
 
 if TYPE_CHECKING:
     from matplotlib import image
@@ -333,7 +335,7 @@ class Blast:
         window_size: int | tuple[int, int] = 50,
         threshold: float = 5e-1,
         max_shift: int = 20,
-        no_of_stacks: int = 1,
+        template_stacks: int = 1,
     ) -> tuple[np.ndarray, list[datetime], np.ndarray]:
         """Follow a phase pick through a Blast.
 
@@ -357,7 +359,7 @@ class Blast:
                 Defaults to 5e-1.
             max_shift (int, optional): Maximum allowed shift in samples for
                 neighboring picks. Defaults to 20.
-            no_of_stacks (int): Numbers of traces to stack to define the template. Default is 1,
+            template_stacks (int): Numbers of traces to stack to define the template. Default is 1,
                 i.e. a single trace.
                 Stacking close to root template is limited by the distance to the
                 root template.
@@ -381,14 +383,14 @@ class Blast:
 
         pick_channels, pick_times, pick_correlations = [], [], []
 
-        def prepare_template(data: np.ndarray) -> np.ndarray:
-            data = np.sum(data, axis=0) / len(data)
+        def prepare_template(data: Deque[np.ndarray]) -> np.ndarray:
+            data = np.mean(data, axis=0)
             return data * template_taper
 
         def correlate(data: np.ndarray, direction: Literal[1, -1] = 1) -> None:
             template = root_template.copy()
             template_stack: Deque[np.ndarray] = deque(
-                [np.array(template)], maxlen=no_of_stacks
+                [np.array(template)], maxlen=template_stacks
             )
 
             index = root_idx
@@ -430,9 +432,11 @@ class Blast:
         correlate(self.data[pick_channel:])
         correlate(self.data[: pick_channel - 1][::-1], direction=-1)
 
-        pick_channels = np.array(pick_channels) + self.start_channel
-        pick_correlations = np.array(pick_correlations)
-        return pick_channels, pick_times, pick_correlations
+        pick_channels = (np.array(pick_channels) + self.start_channel).tolist()
+
+        return Picks(
+            channel=pick_channels, time=pick_times, correlation=pick_correlations
+        )
 
     def taper(self, alpha: float = 0.05) -> None:
         """Taper in time-domain and in-place with a Tukey window.
@@ -500,6 +504,34 @@ class Blast:
         blast.data = blast.data[:, start_sample:end_sample]
         blast.start_time += timedelta(seconds=begin)
         return blast
+
+    def trim_from_picks(self, picks: Picks, time_window: int = 1):
+        """Trims channels to a given time window after a pick time.
+
+        Args:
+            picks (Picks):
+            time_window (int): time window after pick
+        """
+        blast = self.copy()
+        blast = blast.as_traces()
+
+        channels = picks.channel
+        times = picks.time
+
+        trimmed_traces = []
+        for channel, time in zip(channels, times):
+            time = time.timestamp()
+            # find channel
+            tr = next((x for x in blast if int(x.station) == channel), None)
+
+            # check if marker is in time range of trace
+            if not tr.time_span[0] <= time <= tr.time_span[1]:
+                continue
+
+            trchop = tr.chop(tmin=time, tmax=time + time_window)
+            trimmed_traces.append(trchop)
+
+        return trimmed_traces
 
     def to_strain(self, detrend: bool = True) -> Blast:
         """Convert the traces to strain.
@@ -605,7 +637,7 @@ class Blast:
             dates.date2num(self.start_time) if show_date else 0.0,
         )
 
-        data = self.data.copy()
+        data = self.data.copy().astype(float)
         if normalize_traces:
             data /= np.abs(data.max(axis=1, keepdims=True))
 
@@ -800,7 +832,7 @@ class Pack:
     bandpass = shared_function(Blast.bandpass)
     afk_filter = shared_function(Blast.afk_filter)
     decimate = shared_function(Blast.decimate)
-
+    # why some functions two times??
     trim_time = shared_function(Blast.trim_time)
     trim_channels = shared_function(Blast.trim_channels)
 

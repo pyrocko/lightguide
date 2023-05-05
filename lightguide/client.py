@@ -44,7 +44,7 @@ class ExampleData:
         return Blast.from_miniseed(file, channel_spacing=1.0)
 
     @classmethod
-    def markerfile(cls) -> Blast:
+    def markerfile(cls) -> Path:
         file = Path("../examples/markers_VSP-DAS-G1-120.txt")
         if not file.exists():
             print(

@@ -345,7 +345,7 @@ class Blast:
         2. Calculate normalized cross correlate with downwards neighbor.
         3. Evaluate maximum x-correlation in allowed window (max_shift).
         4. Update template trace and go to 2.
-            4a. if no_of_stacks >1: stack templates for correlation to stabilize
+            4a. if template_stacks > 1: stack templates for correlation to stabilize
         5. Repeat for upward neighbors.
 
         Args:

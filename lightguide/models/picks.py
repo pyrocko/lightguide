@@ -3,14 +3,16 @@ from typing import List, Tuple, Dict
 from datetime import datetime
 from pyrocko import marker
 
+from lightguide.utils import PathStr
+
 
 class Picks(BaseModel):
-    channel: list[int] = [-1]
-    time: list[datetime] = None
+    channel: list[int] = []
+    time: list[datetime] = []
     correlation: list[float] = []
     kind: list[int] = []
 
-    def save_picks(self, filename):
+    def save_picks(self, filename: PathStr):
         """
         Saves picks as a pyrocko markerfile.
 
@@ -32,10 +34,10 @@ class Picks(BaseModel):
             tmin = ptime.timestamp()
             m = marker.Marker(nslc_ids=nslc_id, tmin=tmin, tmax=tmin, kind=kind)
             markers.append(m)
-        marker.save_markers(markers=markers, filename=filename)
+        marker.save_markers(markers=markers, filename=str(filename))
 
     @classmethod
-    def from_pyrocko_picks(cls, filename):
+    def from_pyrocko_picks(cls, filename: PathStr):
         """
         Loads pyrocko picks from file.
 
@@ -43,7 +45,7 @@ class Picks(BaseModel):
             filename (str): filename to read
         """
         markers = marker.load_markers(filename)
-        channels = [m.nslc_ids[0][1] for m in markers]
+        channels = ["%05d" % int(m.nslc_ids[0][1]) for m in markers]
         times = [m.tmin for m in markers]
         kinds = [m.kind for m in markers]
 

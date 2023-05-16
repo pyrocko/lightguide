@@ -7,19 +7,23 @@ from lightguide.utils import PathStr
 
 
 class Picks(BaseModel):
-    channel: list[int] = []
-    time: list[datetime] = []
+    channel: list[int]
+    time: list[datetime]
     correlation: list[float] = []
     kind: list[int] = []
 
-    def save_picks(self, filename: PathStr):
+    def save_picks(self, filename: PathStr) -> None:
         """
         Saves picks as a pyrocko markerfile.
 
         Args:
             filename (str): path to filename
-            channels (list): list of channelnames
-            times (list of datetimes): list of pick times in datetime-format
+        """
+        marker.save_markers(markers=self.as_markers(), filename=str(filename))
+
+    def as_markers(self) -> list:
+        """
+        Converts picks object to pyrocko markers
         """
         channels = self.channel
         times = self.time
@@ -30,14 +34,14 @@ class Picks(BaseModel):
 
         markers = []
         for ch, ptime, kind in zip(channels, times, kinds):
-            nslc_id = [("DAS", "%05d" % ch, "", "")]
+            nslc_id = [("", "%05d" % ch, "", "")]
             tmin = ptime.timestamp()
             m = marker.Marker(nslc_ids=nslc_id, tmin=tmin, tmax=tmin, kind=kind)
             markers.append(m)
-        marker.save_markers(markers=markers, filename=str(filename))
+        return markers
 
     @classmethod
-    def from_pyrocko_picks(cls, filename: PathStr):
+    def from_pyrocko_picks(cls, filename: PathStr) -> "Picks":
         """
         Loads pyrocko picks from file.
 
@@ -50,5 +54,3 @@ class Picks(BaseModel):
         kinds = [m.kind for m in markers]
 
         return Picks(channel=channels, time=times, kind=kinds)
-
-    # def plot ()

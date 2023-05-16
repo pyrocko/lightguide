@@ -5,6 +5,7 @@ import logging
 from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 from functools import wraps
+import math
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -327,6 +328,40 @@ class Blast:
             normalize_power=normalize_power,
         )
 
+    def average_traces(self, no_of_traces, reduce_channels=False):
+        """Average over number of neighbouring traces.
+        Args:
+            no_of_traces (int): number of channels to be used for averaging
+            reduce_channels (bool): if True: returns list of averaged traces with no overlap (i.e. if no_of_traces=10, reurns traces 5,15,25...)
+        """
+        blast = self.copy()
+        avs = []
+        d = deque(maxlen=no_of_traces)
+        for tr in blast.as_traces():
+            d.append(tr.ydata)
+            av = np.sum(d, axis=0) / len(d)
+            avs.append(av)
+        avs = np.array(avs)
+
+        if reduce_channels:
+            avs = avs[no_of_traces:-1:no_of_traces, :]  # select
+            traces = []
+            channel = math.ceil(no_of_traces / 2)
+            for av in avs:
+                traces.append(
+                    Trace(
+                        ydata=av,
+                        tmin=self.start_time.timestamp(),
+                        deltat=self.delta_t,
+                        station=f"{channel:05d}",
+                    )
+                )
+                channel += no_of_traces
+            return traces
+
+        blast.data = avs
+        return blast
+
     def follow_phase(
         self,
         pick_time: datetime,
@@ -431,10 +466,12 @@ class Blast:
         correlate(self.data[pick_channel:])
         correlate(self.data[: pick_channel - 1][::-1], direction=-1)
 
-        pick_channels = (np.array(pick_channels) + self.start_channel).tolist()
+        pick_channels = np.array(pick_channels) + self.start_channel
 
         return Picks(
-            channel=pick_channels, time=pick_times, correlation=pick_correlations
+            channel=pick_channels.tolist(),
+            time=pick_times,
+            correlation=pick_correlations,
         )
 
     def taper(self, alpha: float = 0.05) -> None:

@@ -11,7 +11,8 @@ name = "lightguide"
 description = "Tools for distributed acoustic sensing and modelling."
 dynamic = ["version"]
 requires-python = ">=3.8"
-authors = [{ name = "Marius Paul Isken" }, { email = "mi@gfz-potsdam.de" }]
+authors = [{ name = "Marius Paul Isken" }, { email = "mi@gfz-potsdam.de" },
+{ name = "Juliane Starke" }, { email = "justarke@gfz-potsdam.de" }]
 keywords = [
   "distributed acoustic sensing",
   "DAS",

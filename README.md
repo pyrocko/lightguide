@@ -104,4 +104,4 @@ pre-commit install
 
 Contribution and merge requests by the community are welcome!
 
-Lightguide was written by Marius Paul Isken and is licensed under the GNU GENERAL PUBLIC LICENSE v3.
+Lightguide was written by Marius Paul Isken and Juliane Starke and is licensed under the GNU GENERAL PUBLIC LICENSE v3.

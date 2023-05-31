@@ -138,7 +138,6 @@ class Blast:
     def reduce_channels(self, n: int) -> None:
         """Returns sparsed blast containing only every n-th channel"""
         self.data = self.data[:-1:n, :]
-        print(self.data.shape[:])
         self.channel_spacing = self.channel_spacing * n
         self.channel_list = self.channel_list[:-1:n]
 
@@ -149,7 +148,7 @@ class Blast:
         """
         idx = self.get_channel_index(channel, strict=True)
         if idx == None:
-            print(f"#{channel} not in list.")
+            print(f"#{channel} not in range.")
             return self
         self.data = np.delete(self.data, idx, 0)
         self.channel_list = np.delete(self.channel_list, idx)
@@ -168,7 +167,7 @@ class Blast:
         """
         return self.channel_list[channel_index]
 
-    def get_channel_index(self, channel: int, strict=False) -> int:
+    def get_channel_index(self, channel: int, strict=True) -> int:
         """Finds index of a given channel or channel closest to it and returns it.
         Args:
             channel (int): Channel name.
@@ -182,9 +181,11 @@ class Blast:
         if channels[idx] == channel:
             return idx
         elif strict == False:
-            print(f"#{channel} not in channel list. #{channels[idx]} is used instead.")
             return idx
-        return None
+        else:
+            raise ValueError(
+                f"#{channel} not in channel list. To get closest channel (#{channels[idx]}) set 'strict==False'."
+            )
 
     def get_trace(self, channel: int) -> np.ndarray:
         """Get data from a singular channel.
@@ -435,8 +436,6 @@ class Blast:
         if isinstance(window_size, int):
             window_size = (window_size, window_size)
 
-        pick_channel -= self.start_channel
-
         root_idx = self._time_to_sample(pick_time)
 
         # Ensure the window is odd-sized with the pick in center.
@@ -482,7 +481,7 @@ class Blast:
                     continue
 
                 pick_times.append(phase_time)
-                pick_channels.append(pick_channel + ichannel * direction)
+                pick_channels.append(pick_channel_idx + ichannel * direction)
                 pick_correlations.append(phase_correlation)
 
                 template = trace[
@@ -493,13 +492,16 @@ class Blast:
                 template_stack.append(template)
                 index = phase_idx
 
-        correlate(self.data[pick_channel:])
-        correlate(self.data[: pick_channel - 1][::-1], direction=-1)
+        pick_channel_idx = self.get_channel_index(pick_channel)
+        correlate(self.data[pick_channel_idx:])
+        correlate(self.data[: pick_channel_idx - 1][::-1], direction=-1)
 
-        pick_channels = np.array(pick_channels) + self.start_channel
+        channels = []
+        for idx in pick_channels:
+            channels.append(self.get_channel_name(idx))
 
         return Picks(
-            channel=pick_channels.tolist(),
+            channel=channels,
             time=pick_times,
             correlation=pick_correlations,
         )
@@ -757,11 +759,11 @@ class Blast:
         """
 
         traces = []
-        for icha in range(self.n_channels):
-            channel = icha + self.start_channel
+        for icha, data in enumerate(self.data):
+            channel = self.channel_list[icha]
             traces.append(
                 Trace(
-                    ydata=self.data[icha],
+                    ydata=data,
                     tmin=self.start_time.timestamp(),
                     deltat=self.delta_t,
                     station=f"{channel:05d}",

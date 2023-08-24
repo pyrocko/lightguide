@@ -1,4 +1,5 @@
 from __future__ import annotations
+from collections import deque
 
 import logging
 from copy import deepcopy
@@ -8,6 +9,7 @@ from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
+    Deque,
     Iterable,
     Iterator,
     Literal,
@@ -19,11 +21,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import colors, dates
 from matplotlib.colors import Colormap
-from pyrocko import io
+from pyrocko import io, pile, obspy_compat, trace
 from pyrocko.trace import Trace
-from scipy import signal
+from scipy import ndimage, signal
+import re
+import math
 
 from lightguide.utils import PathStr
+from lightguide.models.picks import *
 
 from .filters import afk_filter
 from .signal import decimation_coefficients
@@ -57,6 +62,7 @@ class Blast:
 
     start_channel: int
     channel_spacing: float
+    channel_list: np.ndarray
 
     def __init__(
         self,
@@ -65,6 +71,7 @@ class Blast:
         sampling_rate: float,
         start_channel: int = 0,
         channel_spacing: float = 0.0,
+        channel_list: list = [],
         unit: MeasurementUnit = "strain rate",
     ) -> None:
         """Create a new blast from NumPy array.
@@ -91,6 +98,10 @@ class Blast:
 
         self.start_channel = start_channel
         self.channel_spacing = channel_spacing
+        self.channel_list = channel_list
+
+        if len(self.channel_list) == 0:
+            self.channel_list = np.arange(start_channel, len(data), 1)
 
         self.processing_flow = []
 
@@ -112,7 +123,7 @@ class Blast:
     @property
     def end_channel(self) -> int:
         """End Channel."""
-        return self.start_channel + self.n_channels
+        return self.channel_list[-1]
 
     @property
     def n_samples(self) -> int:
@@ -124,18 +135,68 @@ class Blast:
         """Duration in seconds."""
         return self.n_samples * self.delta_t
 
+    def reduce_channels(self, n: int) -> None:
+        """Returns sparsed blast containing only every n-th channel"""
+        self.data = self.data[:-1:n, :]
+        self.channel_spacing = self.channel_spacing * n
+        self.channel_list = self.channel_list[:-1:n]
+
+    def exlude_channel(self, channel) -> None:
+        """Deletes selected channel, in-place.
+        Args:
+            channel (int): number of channel to be removed.
+        """
+        idx = self.get_channel_index(channel, strict=True)
+        if idx == None:
+            print(f"#{channel} not in range.")
+            return self
+        self.data = np.delete(self.data, idx, 0)
+        self.channel_list = np.delete(self.channel_list, idx)
+
+    def exlude_channels(self, channels) -> None:
+        """Deletes channels given in list from blast, in-place."""
+        for channel in channels:
+            self.exlude_channel(channel=channel)
+
+    def get_channel_name(self, channel_index: int) -> int:
+        """Gets name of channel from it's index as given in channel_list.
+        Args:
+            channel_index (int): index of channel of interest.
+        Returns:
+            int: Channel name.
+        """
+        return self.channel_list[channel_index]
+
+    def get_channel_index(self, channel: int, strict=True) -> int:
+        """Finds index of a given channel or channel closest to it and returns it.
+        Args:
+            channel (int): Channel name.
+            strict (bool): if False, return channel closest to channel
+        Returns:
+            int: channel index
+        """
+        channels = self.channel_list
+        idx = (np.abs(channels - channel)).argmin()
+        # idx = np.searchsorted(channels, channel, side="left")  # maybe faster??
+        if channels[idx] == channel:
+            return idx
+        elif strict == False:
+            return idx
+        else:
+            raise ValueError(
+                f"#{channel} not in channel list. To get closest channel (#{channels[idx]}) set 'strict==False'."
+            )
+
     def get_trace(self, channel: int) -> np.ndarray:
         """Get data from a singular channel.
 
         Args:
-            channel (int): Channel number.
+            channel (int): Channel name.
 
         Returns:
             np.ndarray: 1D Trace.
         """
-        if not self.start_channel <= channel < self.end_channel:
-            raise ValueError(f"Channel {channel} is out of bounds")
-        return self.data[channel - self.start_channel]
+        return self.data[self.get_channel_index(channel)]
 
     def _time_to_sample(self, time: datetime) -> int:
         """Get sample index for a time.
@@ -297,6 +358,21 @@ class Blast:
         else:
             self.data = signal.sosfilt(sos, self.data, axis=1)
 
+    def wiener_filter(self, size: int = 5):
+        """Apply Wiener filter in-place.
+        Args:
+            size (int, optional): Size of the footprint. Defaults to 5.
+        """
+        self.data = signal.wiener(self.data, mysize=size)
+
+    def median_filter(self, size: int = 3) -> None:
+        """Apply median filter in-place.
+        Args:
+            size (int, optional): Footprint of the filter.
+                Defaults to 3.
+        """
+        self.data = ndimage.median_filter(self.data, size=size)
+
     def afk_filter(
         self,
         exponent: float = 0.8,
@@ -323,13 +399,24 @@ class Blast:
             normalize_power=normalize_power,
         )
 
+    def average_traces(self, no_of_traces) -> Blast:
+        """Average over number of neighbouring traces, in place.
+        Args:
+            no_of_traces (int): number of channels to be used for averaging
+        """
+        kernel = np.ones(shape=(no_of_traces, 1)) / no_of_traces
+        avs = signal.fftconvolve(self.data, kernel, mode="valid")
+        self.data = avs
+
     def follow_phase(
         self,
-        pick_time: datetime,
-        pick_channel: int,
+        picks: Picks,
         window_size: int | tuple[int, int] = 50,
         threshold: float = 5e-1,
         max_shift: int = 20,
+        template_stacks: int = 1,
+        taper: bool = False,
+        correlation_mode="same",
     ) -> tuple[np.ndarray, list[datetime], np.ndarray]:
         """Follow a phase pick through a Blast.
 
@@ -337,15 +424,14 @@ class Blast:
         phase through iterative cross-correlation of neighboring traces:
 
         1. Get windowed root pick template.
-        2. Calculate normalized cross correlate with downwards neighbor.
+        2. Calculate normalized cross correlate with downwards neighbor (window of data trace is twice as long as template for correlation).
         3. Evaluate maximum x-correlation in allowed window (max_shift).
         4. Update template trace and go to 2.
-
+            4a. if template_stacks > 1: stack templates for correlation to stabilize
         5. Repeat for upward neighbors.
 
         Args:
-            pick_time (datetime): Initial pick in the data set.
-            pick_channel (int): Corresponding channel for the initial pick.
+            picks (Picks): Lightguide Picks object containing the 'seeds' for the correlation. If more than one pick time is given a phase will be followed up to the channel positioned in the middle of two seed picks.
             window_size (int | tuple[int, int], optional): Window size around the pick
                 for the correlation template. If an integer is given it is the
                 half-width. A Tuple gives pre- and post-windows. Defaults to 50.
@@ -353,6 +439,12 @@ class Blast:
                 Defaults to 5e-1.
             max_shift (int, optional): Maximum allowed shift in samples for
                 neighboring picks. Defaults to 20.
+            template_stacks (int): Numbers of traces to stack to define the template. Default is 1,
+                i.e. a single trace.
+                Stacking close to root template is limited by the distance to the
+                root template.
+            taper (bool) = False: taper trace & template before correlating
+            correlation_mode (str): choose numpy correlation mode valid arguments are 'same','full' & 'valid'
 
         Returns:
             tuple[np.ndarray, list[datetime], np.ndarray]: Tuple of channel number,
@@ -361,63 +453,171 @@ class Blast:
         if isinstance(window_size, int):
             window_size = (window_size, window_size)
 
-        pick_channel -= self.start_channel
-        root_idx = self._time_to_sample(pick_time)
+        picks.sort_by(attribute="channel")
+        # select only pics that are in channel list
+        inlist = np.where(np.isin(picks.channel, self.channel_list))
+        for attr, values in picks:
+            if len(values) == 0:
+                continue
+            newvals = []
+            for idx in inlist[0]:
+                newvals.append(values[idx])
+            setattr(picks, attr, newvals)
+        # set phase name to 'P' if not determined otherwise in first pick in list
+        if picks.phase[0] == []:
+            phase = ["P"]
+        else:
+            phase = [picks.phase[0]]
 
-        # Ensure the window is odd-sized with the pick in center.
-        root_template = self.get_trace(pick_channel)[
-            root_idx - window_size[0] : root_idx + window_size[1] + 1
-        ].copy()
-        template_taper = signal.windows.tukey(root_template.size, alpha=0.1)
-
+        # empty lists to store results
         pick_channels, pick_times, pick_correlations = [], [], []
 
-        def prepare_template(data: np.ndarray) -> np.ndarray:
-            return data * template_taper
+        # set up deque to find indexes for correlation windows (if more than one pick time is given)
+        first_channel = self.channel_list[0]
+        chs = [value for value in picks.channel if value in self.channel_list]
+        d = deque([first_channel, first_channel, first_channel], maxlen=3)
 
-        def correlate(data: np.ndarray, direction: Literal[1, -1] = 1) -> None:
-            template = root_template.copy()
-            index = root_idx
+        # loop over all seeds
+        for i in range(0, len(chs)):
+            if i == len(chs) - 1:  # fill deque with right inex numbers
+                d.append(chs[i])
+                d.append(self.channel_list[-1])
+            else:
+                d.append(chs[i])
+                d.append(int((chs[i] + chs[i + 1]) / 2))
 
-            for ichannel, trace in enumerate(data):
-                template = prepare_template(template)
-                norm = np.sqrt(np.sum(template**2)) * np.sqrt(np.sum(trace**2))
-                correlation = np.correlate(trace, template, mode="same")
-                correlation = np.abs(correlation / norm)
+            try:
+                sta_idx = self.get_channel_index(d[0])
+                sto_idx = self.get_channel_index(d[2])
+            except:
+                continue
 
-                # Take maximum only in allowed window
-                phase_idx = (
-                    np.argmax(correlation[index - max_shift : index + max_shift + 1])
-                    + index
-                    - max_shift
+            # get seed pick times and channel
+            pick_channel = picks.channel[i]
+            pick_time = picks.time[i]
+
+            root_idx_abs = self._time_to_sample(pick_time)
+
+            root_template = self.get_trace(pick_channel)[
+                root_idx_abs - window_size[0] : root_idx_abs + window_size[1] + 1
+            ].copy()
+
+            if taper:  # apply taper, if True
+                template_taper = signal.windows.tukey(root_template.size, alpha=0.1)
+                trace_taper = signal.windows.tukey(
+                    root_template.size + window_size[0] + window_size[1], alpha=0.1
+                )
+            else:
+                template_taper = np.ones(root_template.size)
+                trace_taper = np.ones(
+                    root_template.size + window_size[0] + window_size[1]
                 )
 
-                phase_correlation = correlation[phase_idx]
-                phase_time = self._sample_to_time(int(phase_idx))
+            def prepare_template(data: Deque[np.ndarray]) -> np.ndarray:
+                data = np.mean(data, axis=0)
+                return data * template_taper
 
-                if phase_correlation < threshold:
-                    continue
+            def correlate(data: np.ndarray, direction: Literal[1, -1] = 1) -> None:
+                template = root_template.copy()
+                template_stack: Deque[np.ndarray] = deque(
+                    [np.array(template)], maxlen=template_stacks
+                )
 
-                # Avoid the edges
-                if not window_size[0] < phase_idx < self.n_samples - window_size[1]:
-                    continue
+                # set up a padding tuple in case correlation window reaches end of trace, traec will be padded with zeros
+                padding = (0, 0)
+                pick_idx_abs = root_idx_abs  # absolute index of first pick
+                for ichannel, trace in enumerate(data):
+                    template = prepare_template(template_stack)
 
-                pick_times.append(phase_time)
-                pick_channels.append(pick_channel + ichannel * direction)
-                pick_correlations.append(phase_correlation)
+                    # select window of interest
+                    if padding[0] > 0:
+                        tr = trace[
+                            pick_idx_abs
+                            - 2 * window_size[0]
+                            + padding[0] : pick_idx_abs
+                            + 2 * window_size[1]
+                            + 1
+                        ]
+                        tr = np.insert(tr, 0, np.zeros(padding[0]))
+                    elif padding[1] > 0:
+                        tr = trace[
+                            pick_idx_abs
+                            - 2 * window_size[0] : pick_idx_abs
+                            + 2 * window_size[1]
+                            + 1
+                            - padding[1]
+                        ]
+                        tr = np.append(tr, np.zeros(padding[1]))
+                    else:
+                        tr = trace[
+                            pick_idx_abs
+                            - 2 * window_size[0] : pick_idx_abs
+                            + 2 * window_size[1]
+                            + 1
+                        ]
+                    tr = tr * trace_taper
 
-                template = trace[
-                    phase_idx - window_size[0] : phase_idx + window_size[1] + 1
-                ].copy()
-                index = phase_idx
+                    # correlate traces normalize them and find lag time
+                    norm = np.sqrt(np.sum(template**2)) * np.sqrt(np.sum(tr**2))
+                    correlation = np.correlate(tr, template, mode=correlation_mode)
+                    correlation = np.abs(correlation / norm)
+                    lags = signal.correlation_lags(
+                        tr.size, template.size, mode=correlation_mode
+                    )
+                    max_corr_idx = np.argmax(correlation)
+                    lag = lags[max_corr_idx]
+                    temp_idx = lag + window_size[0]
+                    temp_idx_abs = pick_idx_abs - 2 * window_size[0] + temp_idx
 
-        correlate(self.data[pick_channel:])
-        correlate(self.data[: pick_channel - 1][::-1], direction=-1)
+                    phase_correlation = correlation[max_corr_idx]
+                    if phase_correlation < threshold:
+                        continue
 
-        pick_channels = np.array(pick_channels) + self.start_channel
-        pick_correlations = np.array(pick_correlations)
+                    # Avoid the edges
+                    if (temp_idx_abs - 2 * window_size[0]) < 0:
+                        print("Trace too short! Zero padding in front.")
+                        print(pick_channel_idx + ichannel * direction)
+                        padding = (temp_idx_abs - 2 * window_size[0], 0)
+                    elif (temp_idx_abs + 2 * window_size[1]) > len(trace):
+                        padding = (0, len(trace) - temp_idx_abs + 2 * window_size[1])
+                        print("Trace too short! Zero padding in end.")
+                        print(pick_channel_idx + ichannel * direction)
 
-        return pick_channels, pick_times, pick_correlations
+                    # set new absolute pick index if it is within max shift
+                    if abs(pick_idx_abs - temp_idx_abs) < max_shift:
+                        pick_idx_abs = temp_idx_abs
+
+                    phase_time = self._sample_to_time(int(pick_idx_abs))
+                    pick_times.append(phase_time)
+                    pick_channels.append(pick_channel_idx + ichannel * direction)
+                    pick_correlations.append(phase_correlation)
+
+                    # update template
+                    template = trace[
+                        pick_idx_abs
+                        - window_size[0] : pick_idx_abs
+                        + window_size[1]
+                        + 1
+                    ]
+
+                    template_stack.append(template)
+
+            pick_channel_idx = self.get_channel_index(pick_channel)
+            correlate(self.data[pick_channel_idx:sto_idx])
+            correlate(self.data[sta_idx : (pick_channel_idx + 1)][::-1], direction=-1)
+
+            channels = []
+            for idx in pick_channels:
+                channels.append(self.get_channel_name(idx))
+
+        phase = phase * len(pick_times)
+
+        return Picks(
+            channel=channels,
+            time=pick_times,
+            correlation=pick_correlations,
+            phase=phase,
+        )
 
     def taper(self, alpha: float = 0.05) -> None:
         """Taper in time-domain and in-place with a Tukey window.
@@ -459,7 +659,10 @@ class Blast:
             Blast: Trimmed Blast.
         """
         blast = self.copy()
+        begin = blast.get_channel_index(begin, strict=False)
+        end = blast.get_channel_index(end, strict=False)
         blast.start_channel += begin
+        blast.channel_list = blast.channel_list[begin:end]
         blast.data = blast.data[begin:end]
         return blast
 
@@ -485,6 +688,45 @@ class Blast:
         blast.data = blast.data[:, start_sample:end_sample]
         blast.start_time += timedelta(seconds=begin)
         return blast
+
+    def trim_from_picks(
+        self, picks: Picks, time_window: int | tuple[int, int] = 1
+    ) -> list[Trace]:
+        """Trims channels to a time window defined around a given pick time.
+
+        Args:
+            picks (Picks):
+            time_window (int|tuple): Window size [s] around the pick. If an integer is given
+            only time window after pick is chosen. A Tuple gives pre- and post-windows.
+            Default is to 1 s post window.
+
+        Returns:
+            List: of trimmed pyrocko traces
+        """
+        if not isinstance(time_window, tuple):
+            time_window = (0, time_window)
+
+        blast = self.copy()
+        blast = blast.as_traces()
+
+        channels = picks.channel
+        times = picks.time
+
+        trimmed_traces = []
+        for channel, time in zip(channels, times):
+            time = time.timestamp()
+            # find channel
+            tr = next((x for x in blast if int(x.station) == channel), None)
+            if tr == None:
+                continue
+            # check if marker is in time range of trace
+            if not tr.time_span[0] <= time <= tr.time_span[1]:
+                continue
+
+            trchop = tr.chop(tmin=time - time_window[0], tmax=time + time_window[1])
+            trimmed_traces.append(trchop)
+
+        return trimmed_traces
 
     def to_strain(self, detrend: bool = True) -> Blast:
         """Convert the traces to strain.
@@ -557,6 +799,7 @@ class Blast:
         cmap: str | Colormap = "seismic",
         show_date: bool = False,
         show_channel: bool = False,
+        picks: Picks = None,
     ) -> image.AxesImage:
         """Plot data of the blast.
 
@@ -590,18 +833,47 @@ class Blast:
             dates.date2num(self.start_time) if show_date else 0.0,
         )
 
-        data = self.data.copy()
+        data = self.data.copy().astype(float)
         if normalize_traces:
             data /= np.abs(data.max(axis=1, keepdims=True))
 
         img = ax.imshow(
             data.T,
             aspect="auto",
-            # interpolation="nearest",
+            interpolation="nearest",
             cmap=cmap,
             extent=extent,
             norm=colors.CenteredNorm(),
         )
+
+        def plot_picks(ax, picks):
+            # marker kind specifiying color
+            colours = {
+                0: "r",
+                1: "lightgreen",
+                2: "b",
+                3: "plum",
+                4: "brown",
+                5: "y",
+                6: "grey",
+            }
+            if show_channel:
+                ch = picks.channel
+            else:
+                ch = [c * d_channel for c in picks.channel]
+            if show_date:
+                tt = picks.time
+            else:
+                tt = [self._time_to_sample(t) * self.delta_t for t in picks.time]
+
+            if len(picks.kind) > 0:
+                c = [colours[k] for k in picks.kind]
+            else:
+                c = "k"
+            ax.scatter(ch, tt, marker="x", c=c)
+
+        if picks != None:
+            plot_picks(ax=ax, picks=picks)
 
         ax.set_ylabel("Time [s]")
         if show_date:
@@ -641,17 +913,31 @@ class Blast:
         """
 
         traces = []
-        for icha in range(self.n_channels):
-            channel = icha + self.start_channel
+        for icha, data in enumerate(self.data):
+            channel = self.channel_list[icha]
             traces.append(
                 Trace(
-                    ydata=self.data[icha],
+                    ydata=data,
                     tmin=self.start_time.timestamp(),
                     deltat=self.delta_t,
                     station=f"{channel:05d}",
                 )
             )
         return traces
+
+    def to_obspy_stream(self):
+        """Converts blast to an obspy stream
+
+        Returns:
+            Obspy stream containing traces of blast.
+        """
+        p = pile.Pile()
+        p.add(self.as_traces())
+        return obspy_compat.to_obspy_stream(p)
+
+    def snuffle(self, **kwargs) -> None:
+        """Show traces of blast in a snuffler window."""
+        trace.snuffle(self.as_traces(), **kwargs)
 
     @classmethod
     def from_pyrocko(cls, traces: list[Trace], channel_spacing: float = 4.0) -> Blast:
@@ -671,7 +957,8 @@ class Blast:
         if not traces:
             raise ValueError("Empty list of traces")
 
-        traces = sorted(traces, key=lambda tr: int(tr.station))
+        traces = sorted(traces, key=lambda tr: int(re.sub(r"\D", "", tr.station)))
+        channel_list = np.array([int(re.sub(r"\D", "", tr.station)) for tr in traces])
         ntraces = len(traces)
 
         tmin = set()
@@ -702,8 +989,10 @@ class Blast:
             data=data,
             start_time=datetime.fromtimestamp(tmin.pop(), tz=timezone.utc),
             sampling_rate=int(1.0 / delta_t.pop()),
-            start_channel=min(int(tr.station) for tr in traces),
+            # start_channel=min(int(re.sub(r"\D", "", tr.station)) for tr in traces),
+            start_channel=channel_list[0],
             channel_spacing=channel_spacing,
+            channel_list=channel_list,
         )
 
     @classmethod
@@ -721,7 +1010,10 @@ class Blast:
         from pyrocko import io
 
         traces = io.load(str(file), format="mseed")
-        return cls.from_pyrocko(traces, channel_spacing=channel_spacing)
+        return cls.from_pyrocko(
+            traces,
+            channel_spacing=channel_spacing,
+        )
 
 
 TFun = TypeVar("TFun", bound=Callable[..., Any])
@@ -791,11 +1083,6 @@ class Pack:
 
     mute_median = shared_function(Blast.mute_median)
     one_bit_normalization = shared_function(Blast.one_bit_normalization)
-    afk_filter = shared_function(Blast.afk_filter)
-    decimate = shared_function(Blast.decimate)
-
-    trim_time = shared_function(Blast.trim_time)
-    trim_channels = shared_function(Blast.trim_channels)
 
     to_strain = shared_function(Blast.to_strain)
     to_relative_velocity = shared_function(Blast.to_relative_velocity)

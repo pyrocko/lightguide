@@ -101,6 +101,21 @@ class Picks(BaseModel):
             else:
                 setattr(self, attr, list(temp[:, i]))
 
+    def get_picktime(self, channel: int) -> datetime | None:
+        """
+        Returns time of pick of a selected channel (first occurence).
+
+        Args:
+            channel (int): name of channel
+        Returns:
+            pick time (datetime| None): pick time at channel (first occurence in list) of channel not in list, returns none
+        """
+        try:
+            idx = self.channel.index(channel)
+            return self.time[idx]
+        except:
+            return None
+
     @classmethod
     def from_pyrocko_markers(cls, markers: List) -> "Picks":
         """

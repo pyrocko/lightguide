@@ -250,7 +250,7 @@ checksum = "3304a64d199bb964be99741b7a14d26972741915b3649639149b2479bb46f4b5"
 
 [[package]]
 name = "lightguide"
-version = "0.2.1"
+version = "0.4.0"
 dependencies = [
  "fftw",
  "ndarray 0.15.6",

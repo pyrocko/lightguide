@@ -584,7 +584,7 @@ class Blast:
                         print(pick_channel_idx + ichannel * direction)
 
                     # set new absolute pick index if it is within max shift
-                    if (pick_idx_abs - temp_idx_abs) < max_shift:
+                    if abs(pick_idx_abs - temp_idx_abs) < max_shift:
                         pick_idx_abs = temp_idx_abs
 
                     phase_time = self._sample_to_time(int(pick_idx_abs))
